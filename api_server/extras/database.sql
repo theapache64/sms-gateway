@@ -25,8 +25,7 @@ CREATE TABLE users(
 
 CREATE TABLE requests(
   id INT NOT NULL AUTO_INCREMENT,
-  recepient VARCHAR(10) NOT NULL,
-  content TEXT NOT NULL,
+  message TEXT NOT NULL,
   server_id INT NOT NULL,
   user_id INT NOT NULL,
   is_active TINYINT(4) NOT NULL DEFAULT 1,
@@ -37,6 +36,15 @@ CREATE TABLE requests(
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
   );
 
+CREATE TABLE recipients(
+  id INT NOT NULL AUTO_INCREMENT,
+  request_id INT NOT NULL,
+  recipient VARCHAR (15) NOT NULL,
+  is_active TINYINT(4) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(id),
+  FOREIGN KEY (request_id) REFERENCES requests(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 CREATE TABLE request_statuses(
   id INT NOT NULL AUTO_INCREMENT,
@@ -48,4 +56,3 @@ CREATE TABLE request_statuses(
   PRIMARY KEY(id),
   FOREIGN KEY (request_id) REFERENCES requests(id) ON DELETE CASCADE ON UPDATE CASCADE
   );
-  
