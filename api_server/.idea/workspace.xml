@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c57d7058-5d03-47ec-95ad-ea8f4d031bed" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/extras/database.sql" afterPath="$PROJECT_DIR$/extras/database.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="c57d7058-5d03-47ec-95ad-ea8f4d031bed" name="Default" comment="" />
     <ignored path="sg_api_server.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -523,12 +519,12 @@
       <created>1480348349414</created>
       <option name="number" value="Default" />
       <updated>1480348349414</updated>
-      <workItem from="1480348350505" duration="3249000" />
+      <workItem from="1480348350505" duration="3276000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3249000" />
+    <option name="totallyTimeSpent" value="3276000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1366" height="744" extended-state="6" />
