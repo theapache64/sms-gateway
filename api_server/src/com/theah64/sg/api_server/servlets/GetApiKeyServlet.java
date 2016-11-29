@@ -5,17 +5,13 @@ import com.theah64.sg.api_server.database.tables.BaseTable;
 import com.theah64.sg.api_server.database.tables.Preference;
 import com.theah64.sg.api_server.database.tables.Users;
 import com.theah64.sg.api_server.models.User;
-import com.theah64.sg.api_server.utils.APIResponse;
-import com.theah64.sg.api_server.utils.MailHelper;
-import com.theah64.sg.api_server.utils.RandomString;
-import com.theah64.sg.api_server.utils.Request;
+import com.theah64.sg.api_server.utils.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 /**
  * Created by theapache64 on 15/10/16.
@@ -23,8 +19,6 @@ import java.util.regex.Pattern;
 @WebServlet(urlPatterns = {AdvancedBaseServlet.VERSION_CODE + "/get_api_key"})
 public class GetApiKeyServlet extends AdvancedBaseServlet {
 
-    private static final String INPUT_EMAIL_REGEX = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-    private static final Pattern emailPattern = Pattern.compile(INPUT_EMAIL_REGEX);
 
     private static final int API_KEY_LENGTH = 10;
 
@@ -48,7 +42,7 @@ public class GetApiKeyServlet extends AdvancedBaseServlet {
 
         final String email = getStringParameter(Users.COLUMN_EMAIL);
 
-        if (emailPattern.matcher(email).matches()) {
+        if (CommonUtils.isValidEmail(email)) {
 
             //Checking if the email already has an api_key.
             User user = Users.getInstance().get(Users.COLUMN_EMAIL, email);

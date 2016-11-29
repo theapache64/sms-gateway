@@ -1,7 +1,6 @@
 package com.theah64.sg.api_server.database.tables;
 
 
-
 import com.theah64.sg.api_server.database.Connection;
 import com.theah64.sg.api_server.models.User;
 
@@ -27,7 +26,7 @@ public class Users extends BaseTable<User> {
     }
 
     @Override
-    public boolean add(User newUser) {
+    public boolean add(User newUser) throws InsertFailedException {
 
         boolean isUserAdded = false;
         final String query = "INSERT INTO users (email,api_key) VALUES (?,?);";
@@ -43,6 +42,7 @@ public class Users extends BaseTable<User> {
 
             ps.close();
         } catch (SQLException e) {
+            isUserAdded = false;
             e.printStackTrace();
         } finally {
             try {
@@ -51,7 +51,12 @@ public class Users extends BaseTable<User> {
                 e.printStackTrace();
             }
         }
-        return isUserAdded;
+
+        if (!isUserAdded) {
+            throw new InsertFailedException("Failed to add new user");
+        }
+
+        return true;
     }
 
     @Override
