@@ -44,7 +44,7 @@ public class Servers extends BaseTable<Server> {
             final PreparedStatement ps = con.prepareStatement(query);
 
             ps.setString(1, server.getName());
-            ps.setString(2, server.getDeviceHash());
+            ps.setString(2, server.getDeviceName());
             ps.setString(3, server.getImei());
             ps.setString(4, server.getDeviceHash());
             ps.setString(5, server.getFcmId());

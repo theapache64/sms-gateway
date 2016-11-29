@@ -23,7 +23,7 @@ public class HeaderSecurity {
     /**
      * Used to identify if passed API-KEY has a valid victim.
      */
-    private void isAuthorized() throws Request.RequestException {
+    protected void isAuthorized() throws Request.RequestException {
 
         if (this.authorization == null) {
             //No api key passed along with request

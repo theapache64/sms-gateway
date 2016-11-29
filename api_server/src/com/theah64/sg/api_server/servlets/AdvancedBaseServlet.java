@@ -71,7 +71,6 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
     }
 
 
-
     protected static final String CONTENT_TYPE_JSON = "application/json";
     private static final String ERROR_GET_NOT_SUPPORTED = "GET method not supported";
     private static final String ERROR_POST_NOT_SUPPORTED = "POST method not supported";

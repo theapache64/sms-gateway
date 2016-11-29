@@ -7,7 +7,11 @@ import com.theah64.sg.api_server.utils.Request;
 import com.theah64.sg.api_server.utils.ServerHeaderSecurity;
 import org.json.JSONException;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Created by theapache64 on 19/11/16,3:11 PM.
@@ -23,6 +27,11 @@ public class UpdateFCMServlet extends AdvancedBaseServlet {
     @Override
     protected String[] getRequiredParameters() {
         return new String[]{Servers.COLUMN_FCM_ID};
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPost(req, resp);
     }
 
     @Override
