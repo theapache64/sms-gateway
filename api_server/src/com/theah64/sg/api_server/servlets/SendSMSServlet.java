@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
  */
 @WebServlet(urlPatterns = {AdvancedBaseServlet.VERSION_CODE + "/send_sms"})
 public class SendSMSServlet extends AdvancedBaseServlet {
+
     @Override
     protected boolean isSecureServlet() {
         return true;
@@ -44,7 +45,9 @@ public class SendSMSServlet extends AdvancedBaseServlet {
                 final String requestId = SMSRequests.getInstance().addv3(new SMSRequest(message, smsServer.getId(), getHeaderSecurity().getUserId()));
 
                 //Adding recipients
-                final JSONArray jaAdvancedRecipients = Recipients.getInstance().adder(requestId, jaRecipients);
+                final JSONArray jaAdvancedRecipients = Recipients.getInstance().add(requestId, jaRecipients);
+
+                System.out.println(jaAdvancedRecipients);
 
                 //Sending sms
                 final JSONObject joFcmResp = FCMUtils.sendSMS(jaAdvancedRecipients, message, smsServer.getFcmId());

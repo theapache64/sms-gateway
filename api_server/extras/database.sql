@@ -57,16 +57,29 @@ CREATE TABLE recipients(
   FOREIGN KEY (sms_request_id) REFERENCES sms_requests(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE request_statuses(
+CREATE TABLE sms_request_statuses(
   id INT NOT NULL AUTO_INCREMENT,
-  sms_request_id INT NOT NULL,
+  recipient_id INT NOT NULL,
   status ENUM('SENT','DELIVERED','FAILED') NOT NULL DEFAULT 'SENT',
-  occured_at INT(11) NOT NULL ,
+  occurred_at INT(11) NOT NULL ,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   is_active TINYINT(4) NOT NULL DEFAULT 1,
   PRIMARY KEY(id),
-  FOREIGN KEY (sms_request_id) REFERENCES sms_requests(id) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (recipient_id) REFERENCES recipients(id) ON DELETE CASCADE ON UPDATE CASCADE
   );
+
+DELIMITER $$
+
+CREATE TRIGGER after_recipient_insert
+AFTER INSERT ON recipients
+FOR EACH ROW BEGIN
+    INSERT INTO sms_request_statuses
+    SET recipient_id = NEW.id,
+      occurred_at = UNIX_TIMESTAMP(NOW());
+END$$
+
+DELIMITER ;
+
 
 CREATE TABLE IF NOT EXISTS preference (
   id int(11) NOT NULL AUTO_INCREMENT,

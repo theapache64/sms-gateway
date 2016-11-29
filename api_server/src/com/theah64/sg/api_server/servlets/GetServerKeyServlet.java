@@ -60,7 +60,7 @@ public class GetServerKeyServlet extends AdvancedBaseServlet {
 
             final String name = getStringParameter(Servers.COLUMN_NAME);
 
-            final Server server = new Server(name, deviceName, imei, deviceHash, fcmId, serverKey);
+            final Server server = new Server(null, name, deviceName, imei, deviceHash, fcmId, serverKey);
             servers.add(server);
 
             final String message = String.format("Hey, New server established\n\nServer: %s\n\nThat's it. :) ", server.toString());

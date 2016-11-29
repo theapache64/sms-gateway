@@ -79,15 +79,16 @@ public class Servers extends BaseTable<Server> {
      */
     public Server getLeastUsedServer() {
         Server server = null;
-        final String query = "SELECT  s.name,s.fcm_id, COUNT(sr.id) AS request_handled FROM servers s LEFT JOIN sms_requests sr ON sr.server_id = s.id WHERE s.is_active = 1 GROUP BY s.id ORDER BY request_handled LIMIT 1;";
+        final String query = "SELECT  s.id,s.name,s.fcm_id, COUNT(sr.id) AS request_handled FROM servers s LEFT JOIN sms_requests sr ON sr.server_id = s.id WHERE s.is_active = 1 GROUP BY s.id ORDER BY request_handled LIMIT 1;";
         final java.sql.Connection con = Connection.getConnection();
         try {
             final Statement stmt = con.createStatement();
             final ResultSet rs = stmt.executeQuery(query);
             if (rs.first()) {
+                final String id = rs.getString(COLUMN_ID);
                 final String name = rs.getString(COLUMN_NAME);
                 final String fcmId = rs.getString(COLUMN_FCM_ID);
-                server = new Server(name, null, null, null, fcmId, null);
+                server = new Server(id, name, null, null, null, fcmId, null);
 
             }
             rs.close();
