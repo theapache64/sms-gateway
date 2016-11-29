@@ -103,7 +103,7 @@ public class BaseTable<T> {
     }
 
 
-    public void addv2(@Nullable final String victimId, final JSONArray jsonArray) throws RuntimeException, JSONException, SQLException {
+    public void addv2(@Nullable final String requestId, final JSONArray jsonArray) throws RuntimeException, JSONException {
         throw new RuntimeException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
 

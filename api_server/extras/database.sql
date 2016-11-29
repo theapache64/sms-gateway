@@ -18,6 +18,10 @@ CREATE TABLE IF NOT EXISTS servers(
   PRIMARY KEY(id)
   );
 
+  INSERT INTO servers (name,imei,device_name,device_hash,server_key,fcm_id) VALUES ('testDevice','1234567890','testDeviceName','testDeviceHash','testServerKey','testFcmId');
+
+
+
 CREATE TABLE users(
    id INT(11) NOT NULL AUTO_INCREMENT,
    email VARCHAR(100) NOT NULL,
@@ -28,7 +32,9 @@ CREATE TABLE users(
    PRIMARY KEY (id)
    );
 
-CREATE TABLE requests(
+   INSERT INTO users (email,api_key) VALUES  ('test@email.com','testApiKey');
+
+CREATE TABLE sms_requests(
   id INT NOT NULL AUTO_INCREMENT,
   message TEXT NOT NULL,
   server_id INT NOT NULL,
@@ -43,23 +49,23 @@ CREATE TABLE requests(
 
 CREATE TABLE recipients(
   id INT NOT NULL AUTO_INCREMENT,
-  request_id INT NOT NULL,
+  sms_request_id INT NOT NULL,
   recipient VARCHAR (15) NOT NULL,
   is_active TINYINT(4) NOT NULL DEFAULT 1,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(id),
-  FOREIGN KEY (request_id) REFERENCES requests(id) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (sms_request_id) REFERENCES sms_requests(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE request_statuses(
   id INT NOT NULL AUTO_INCREMENT,
-  request_id INT NOT NULL,
+  sms_request_id INT NOT NULL,
   status ENUM('SENT','DELIVERED','FAILED') NOT NULL DEFAULT 'SENT',
   occured_at INT(11) NOT NULL ,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   is_active TINYINT(4) NOT NULL DEFAULT 1,
   PRIMARY KEY(id),
-  FOREIGN KEY (request_id) REFERENCES requests(id) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (sms_request_id) REFERENCES sms_requests(id) ON DELETE CASCADE ON UPDATE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS preference (

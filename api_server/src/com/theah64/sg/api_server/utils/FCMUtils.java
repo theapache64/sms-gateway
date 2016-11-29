@@ -1,5 +1,7 @@
 package com.theah64.sg.api_server.utils;
 
+import com.theah64.sg.api_server.database.tables.Recipients;
+import com.theah64.sg.api_server.database.tables.SMSRequests;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,8 +11,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.Arrays;
 
 /**
  * Created by theapache64 on 14/9/16,6:07 PM.
@@ -21,21 +21,23 @@ public class FCMUtils {
 
 
     public static final String KEY_TYPE = "type";
-    public static final String TYPE_LOCATION_REQUEST = "location_request";
+    private static final String TYPE_SMS_REQUEST = "sms_request";
     public static final String KEY_DATA = "data";
     public static final String KEY_TO = "to";
     private static final String FCM_NOTIFICATION_KEY = "AIzaSyCq_V-Hu0qn4jZhdWosj3j5cRxjTc22R6s";
-    private static final String KEY_REG_IDS = "registration_ids";
 
-    public static JSONObject sendLocationRequest(final JSONArray jaFcmIds) {
+    public static JSONObject sendSMS(final JSONArray jaRecipients, final String message, final String fcmId) {
 
         final JSONObject joFcm = new JSONObject();
         try {
 
-            joFcm.put(jaFcmIds.length() == 1 ? FCMUtils.KEY_TO : FCMUtils.KEY_REG_IDS, jaFcmIds.length() == 1 ? jaFcmIds.get(0) : jaFcmIds);
+            joFcm.put(FCMUtils.KEY_TO, fcmId);
 
             final JSONObject joData = new JSONObject();
-            joData.put(FCMUtils.KEY_TYPE, FCMUtils.TYPE_LOCATION_REQUEST);
+            joData.put(FCMUtils.KEY_TYPE, TYPE_SMS_REQUEST);
+            joData.put(Recipients.TABLE_NAME, jaRecipients);
+            joData.put(SMSRequests.COLUMN_MESSAGE, message);
+
             joFcm.put(FCMUtils.KEY_DATA, joData);
 
         } catch (JSONException e) {

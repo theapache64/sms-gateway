@@ -60,7 +60,7 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
 
     protected abstract String[] getRequiredParameters();
 
-    protected abstract void doAdvancedPost() throws Request.RequestException, BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException, Request.RequestException, Request.RequestException;
+    protected abstract void doAdvancedPost() throws BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException, Request.RequestException;
 
 
     public HeaderSecurity getHeaderSecurity() {
