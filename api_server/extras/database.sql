@@ -56,3 +56,16 @@ CREATE TABLE request_statuses(
   PRIMARY KEY(id),
   FOREIGN KEY (request_id) REFERENCES requests(id) ON DELETE CASCADE ON UPDATE CASCADE
   );
+
+CREATE TABLE IF NOT EXISTS preference (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  _key varchar(100) NOT NULL,
+  _value text NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY _key (_key)
+);
+
+INSERT INTO preference (id, _key, _value) VALUES
+(1, 'gmail_username', 'gpixofficial@gmail.com'),
+(2, 'gmail_password', 'thepassword'),
+(3, 'admin_email', 'theapache64@gmail.com');
