@@ -19,8 +19,8 @@ import java.sql.SQLException;
  */
 public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
 
-    private static final SMSRequestStatuses instance = new SMSRequestStatuses();
     public static final String COLUMN_RECIPIENT_ID = "recipient_id";
+    private static final SMSRequestStatuses instance = new SMSRequestStatuses();
     private static final String COLUMN_STATUS = "status";
     private static final String COLUMN_OCCURRED_AT = "occurred_at";
 

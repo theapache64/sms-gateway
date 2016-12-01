@@ -19,10 +19,30 @@ import java.io.PrintWriter;
  */
 public abstract class AdvancedBaseServlet extends HttpServlet {
 
+    public static final String VERSION_CODE = "/v1";
+    protected static final String CONTENT_TYPE_JSON = "application/json";
+    private static final String ERROR_GET_NOT_SUPPORTED = "GET method not supported";
+    private static final String ERROR_POST_NOT_SUPPORTED = "POST method not supported";
     private Request request;
     private HeaderSecurity hs;
     private PrintWriter out;
     private HttpServletRequest httpServletRequest;
+
+    protected static void setGETMethodNotSupported(HttpServletResponse response) throws IOException {
+        notSupported(ERROR_GET_NOT_SUPPORTED, response);
+    }
+
+    protected static void POSTMethodNotSupported(HttpServletResponse response) throws IOException {
+        notSupported(ERROR_POST_NOT_SUPPORTED, response);
+    }
+
+    private static void notSupported(String methodErrorMessage, HttpServletResponse response) throws IOException {
+        response.setContentType(CONTENT_TYPE_JSON);
+        final PrintWriter out = response.getWriter();
+
+        //GET Method not supported
+        out.write(new APIResponse(methodErrorMessage).getResponse());
+    }
 
     public PrintWriter getWriter() {
         return out;
@@ -51,7 +71,6 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
         }
     }
 
-
     protected String getContentType() {
         return CONTENT_TYPE_JSON;
     }
@@ -62,7 +81,6 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
 
     protected abstract void doAdvancedPost() throws BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException, Request.RequestException;
 
-
     public HeaderSecurity getHeaderSecurity() {
         if (!isSecureServlet()) {
             throw new IllegalArgumentException("It's not a secure servlet");
@@ -70,31 +88,9 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
         return hs;
     }
 
-
-    protected static final String CONTENT_TYPE_JSON = "application/json";
-    private static final String ERROR_GET_NOT_SUPPORTED = "GET method not supported";
-    private static final String ERROR_POST_NOT_SUPPORTED = "POST method not supported";
-    public static final String VERSION_CODE = "/v1";
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setGETMethodNotSupported(resp);
-    }
-
-    protected static void setGETMethodNotSupported(HttpServletResponse response) throws IOException {
-        notSupported(ERROR_GET_NOT_SUPPORTED, response);
-    }
-
-    protected static void POSTMethodNotSupported(HttpServletResponse response) throws IOException {
-        notSupported(ERROR_POST_NOT_SUPPORTED, response);
-    }
-
-    private static void notSupported(String methodErrorMessage, HttpServletResponse response) throws IOException {
-        response.setContentType(CONTENT_TYPE_JSON);
-        final PrintWriter out = response.getWriter();
-
-        //GET Method not supported
-        out.write(new APIResponse(methodErrorMessage).getResponse());
     }
 
     public String getStringParameter(String key) {

@@ -22,11 +22,10 @@ public class BaseTable<T> {
 
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NAME = "name";
-    private static final String ERROR_MESSAGE_UNDEFINED_METHOD = "Undefined method.";
-    private static final String COLUMN_AS_TOTAL_ROWS = "total_rows";
     public static final String COLUMN_IS_ACTIVE = "is_active";
     public static final String TRUE = "1";
-
+    private static final String ERROR_MESSAGE_UNDEFINED_METHOD = "Undefined method.";
+    private static final String COLUMN_AS_TOTAL_ROWS = "total_rows";
     private final String tableName;
 
     public BaseTable(String tableName) {
@@ -39,6 +38,12 @@ public class BaseTable<T> {
         return countMap;
     }
 
+    protected static String[] getGroupDecatenated(String data) {
+        if (data != null) {
+            return data.split(",");
+        }
+        return null;
+    }
 
     public T get(final String column, final String value) {
         throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
@@ -55,19 +60,6 @@ public class BaseTable<T> {
     public boolean add(T newInstance) throws InsertFailedException {
         throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
-
-    public static class InsertFailedException extends SQLException {
-        public InsertFailedException(String message) {
-            super(message);
-        }
-    }
-
-    public static class UpdateFailedException extends SQLException {
-        public UpdateFailedException(String message) {
-            super(message);
-        }
-    }
-
 
     public void update(String whereColumn, String whereColumnValue, String updateColumn, String newUpdateColumnValue) throws UpdateFailedException {
         boolean isEdited = false;
@@ -102,7 +94,6 @@ public class BaseTable<T> {
         throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
 
-
     public void addv2(@Nullable final String requestId, final JSONArray jsonArray) throws RuntimeException, JSONException {
         throw new RuntimeException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
@@ -122,7 +113,6 @@ public class BaseTable<T> {
     protected boolean isExist(final String whereColumn, final String whereColumnValue) {
         throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
-
 
     public String get(String byColumn, String byValue, String columnToReturn, final boolean isActive) {
 
@@ -183,7 +173,6 @@ public class BaseTable<T> {
         throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
 
-
     public int getTotal(final String victimId) {
 
         int totalCount = 0;
@@ -214,14 +203,6 @@ public class BaseTable<T> {
         }
 
         return totalCount;
-    }
-
-
-    protected static String[] getGroupDecatenated(String data) {
-        if (data != null) {
-            return data.split(",");
-        }
-        return null;
     }
 
     public JSONArray get(final String columnToReturn, final String whereInColumn, JSONArray whereInValue) throws JSONException {
@@ -266,6 +247,18 @@ public class BaseTable<T> {
 
 
         return jaFcmIds;
+    }
+
+    public static class InsertFailedException extends SQLException {
+        public InsertFailedException(String message) {
+            super(message);
+        }
+    }
+
+    public static class UpdateFailedException extends SQLException {
+        public UpdateFailedException(String message) {
+            super(message);
+        }
     }
 
 }

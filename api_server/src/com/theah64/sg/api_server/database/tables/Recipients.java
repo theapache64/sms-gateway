@@ -16,10 +16,10 @@ import java.sql.SQLException;
  */
 public class Recipients extends BaseTable<Recipient> {
 
-    private static final Recipients instance = new Recipients();
     public static final String TABLE_NAME = "recipients";
     public static final String COLUMN_RECIPIENT = "recipient";
     public static final String COLUMN_SMS_REQUEST_ID = "sms_request_id";
+    private static final Recipients instance = new Recipients();
 
 
     private Recipients() {

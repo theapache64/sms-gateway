@@ -12,12 +12,12 @@ import java.sql.Statement;
  * Created by theapache64 on 29/11/16,8:01 AM.
  */
 public class Servers extends BaseTable<Server> {
-    private static final Servers instance = new Servers();
     public static final String COLUMN_FCM_ID = "fcm_id";
     public static final String COLUMN_DEVICE_HASH = "device_hash";
     public static final String COLUMN_IMEI = "imei";
     public static final String COLUMN_DEVICE_NAME = "device_name";
     public static final String COLUMN_SERVER_KEY = "server_key";
+    private static final Servers instance = new Servers();
 
     private Servers() {
         super("servers");

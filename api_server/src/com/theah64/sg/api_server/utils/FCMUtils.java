@@ -17,13 +17,11 @@ import java.net.URL;
  */
 public class FCMUtils {
 
-    private static final String FCM_SEND_URL = "https://fcm.googleapis.com/fcm/send";
-
-
     public static final String KEY_TYPE = "type";
-    private static final String TYPE_SMS_REQUEST = "sms_request";
     public static final String KEY_DATA = "data";
     public static final String KEY_TO = "to";
+    private static final String FCM_SEND_URL = "https://fcm.googleapis.com/fcm/send";
+    private static final String TYPE_SMS_REQUEST = "sms_request";
     private static final String FCM_NOTIFICATION_KEY = "AIzaSyCq_V-Hu0qn4jZhdWosj3j5cRxjTc22R6s";
 
     public static JSONObject sendSMS(final JSONArray jaRecipients, final String message, final String fcmId) {

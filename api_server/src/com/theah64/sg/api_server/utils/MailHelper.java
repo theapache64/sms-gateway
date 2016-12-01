@@ -1,7 +1,6 @@
 package com.theah64.sg.api_server.utils;
 
 
-
 import com.theah64.sg.api_server.database.Connection;
 import com.theah64.sg.api_server.database.tables.Preference;
 
