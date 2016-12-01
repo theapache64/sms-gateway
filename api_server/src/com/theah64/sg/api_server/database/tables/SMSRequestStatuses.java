@@ -2,11 +2,13 @@ package com.theah64.sg.api_server.database.tables;
 
 import com.theah64.sg.api_server.database.Connection;
 import com.theah64.sg.api_server.models.SMSRequestStatus;
+import com.theah64.sg.api_server.utils.Request;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -64,5 +66,61 @@ public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public JSONArray getStatuses(final String requestId, final String userId) throws JSONException, Request.RequestException {
+
+        JSONArray jaStatuses = null;
+
+        final String query = "SELECT r.recipient, sqs.status, sqs.occurred_at FROM sms_request_statuses sqs INNER JOIN recipients r ON r.id = sqs.recipient_id INNER JOIN sms_requests sr ON r.sms_request_id = sr.id WHERE sr.id = ? AND sr.user_id = ? GROUP BY r.id;";
+
+        final java.sql.Connection con = Connection.getConnection();
+
+        try {
+            final PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, requestId);
+            ps.setString(2, userId);
+
+            final ResultSet rs = ps.executeQuery();
+
+            if (rs.first()) {
+
+                jaStatuses = new JSONArray();
+
+                do {
+                    final String recipient = rs.getString(Recipients.COLUMN_RECIPIENT);
+                    final String status = rs.getString(COLUMN_STATUS);
+                    final String occurredAt = rs.getString(COLUMN_OCCURRED_AT);
+
+                    final JSONObject joStatus = new JSONObject();
+                    joStatus.put(Recipients.COLUMN_RECIPIENT, recipient);
+                    joStatus.put(COLUMN_STATUS, status);
+                    joStatus.put(COLUMN_OCCURRED_AT, occurredAt);
+
+                    jaStatuses.put(joStatus);
+
+                } while (rs.next());
+
+            }
+
+            rs.close();
+            ps.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (jaStatuses == null) {
+            throw new Request.RequestException("No status found");
+        }
+
+        return jaStatuses;
     }
 }

@@ -1,13 +1,14 @@
 package com.theah64.sg.api_server.servlets;
 
 import com.theah64.sg.api_server.database.tables.BaseTable;
+import com.theah64.sg.api_server.database.tables.Recipients;
 import com.theah64.sg.api_server.database.tables.SMSRequestStatuses;
 import com.theah64.sg.api_server.models.SMSRequestStatus;
 import com.theah64.sg.api_server.utils.APIResponse;
 import com.theah64.sg.api_server.utils.Request;
-import com.theah64.sg.api_server.utils.ServerHeaderSecurity;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,11 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by shifar on 30/11/16.
- * server_key (as header), message_id, array( recepient_id,status, occurred_at)
+ * Created by theapache64 on 1/12/16,6:10 AM.
  */
-@WebServlet(urlPatterns = {AdvancedBaseServlet.VERSION_CODE + "/add_statuses"})
-public class AddStatusesServlet extends AdvancedBaseServlet {
+@WebServlet(urlPatterns = {AdvancedBaseServlet.VERSION_CODE + "/get_status"})
+public class GetStatusServlet extends AdvancedBaseServlet {
 
 
     @Override
@@ -30,19 +30,21 @@ public class AddStatusesServlet extends AdvancedBaseServlet {
 
     @Override
     protected boolean isSecureServlet() {
-        return false;
+        return true;
     }
 
     @Override
     protected String[] getRequiredParameters() {
-        return new String[]{SMSRequestStatus.KEY_STATUSES};
+        return new String[]{Recipients.COLUMN_SMS_REQUEST_ID};
     }
 
     @Override
     protected void doAdvancedPost() throws BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException, Request.RequestException {
-        new ServerHeaderSecurity(getHttpServletRequest().getHeader(ServerHeaderSecurity.KEY_AUTHORIZATION));
-        final JSONArray jaStatuses = new JSONArray(getStringParameter(SMSRequestStatus.KEY_STATUSES));
-        SMSRequestStatuses.getInstance().add(jaStatuses);
-        getWriter().write(new APIResponse("Status(es) added", null).getResponse());
+        final String userId = getHeaderSecurity().getUserId();
+        final String smsReqId = getStringParameter(Recipients.COLUMN_SMS_REQUEST_ID);
+        final JSONArray jaStatuses = SMSRequestStatuses.getInstance().getStatuses(smsReqId, userId);
+        final JSONObject joData = new JSONObject();
+        joData.put(SMSRequestStatus.KEY_STATUSES, jaStatuses);
+        getWriter().write(new APIResponse("status availanle", joData).getResponse());
     }
 }
