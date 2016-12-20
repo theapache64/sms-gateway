@@ -65,7 +65,7 @@ public class MailHelper {
 
 
     public static boolean sendApiKey(String email, String apiKey) {
-        return sendMail(email, "GPix API key", "Hi\n\tYour brand new api key is " + apiKey + "\n\nThank you. :)");
+        return sendMail(email, "SMSGateway API key", "Hi\n\tYour brand new api key is " + apiKey + "\n\nThank you. :)");
     }
 
 
