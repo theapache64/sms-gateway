@@ -18,6 +18,8 @@ public class Preference extends BaseTable<String> {
     public static final String KEY_ADMIN_EMAIL = "admin_email";
     public static final String KEY_TEST_API_KEY = "test_api_key";
     private static final String COLUMN_VALUE = "_value";
+    public static final String KEY_EMAIL_USERNAME = "email_username";
+    public static final String KEY_EMAIL_PASSWORD = "email_password";
     private static Preference instance = new Preference();
 
     private Preference() {

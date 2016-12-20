@@ -90,6 +90,6 @@ CREATE TABLE IF NOT EXISTS preference (
 );
 
 INSERT INTO preference (id, _key, _value) VALUES
-(1, 'gmail_username', 'gpixofficial@gmail.com'),
-(2, 'gmail_password', 'thepassword'),
+(1, 'email_username', 'gpixofficial@gmail.com'),
+(2, 'email_password', 'thepassword'),
 (3, 'admin_email', 'theapache64@gmail.com');

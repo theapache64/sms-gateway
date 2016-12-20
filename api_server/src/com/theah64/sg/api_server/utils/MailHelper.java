@@ -16,9 +16,6 @@ public class MailHelper {
 
     private static final String BASE_URL = Connection.isDebugMode() ? "http://localhost:8080" : "http://gpix-shifz.rhcloud.com";
 
-    private static final String KEY_GMAIL_USERNAME = "gmail_username";
-    private static final String KEY_GMAIL_PASSWORD = "gmail_password";
-    private static final String KEY_ADMIN_EMAIL = "admin_email";
 
     private static String gmailUsername, gmailPassword;
 
@@ -29,8 +26,8 @@ public class MailHelper {
         if (gmailUsername == null || gmailPassword == null) {
             final Preference preference = Preference.getInstance();
 
-            gmailUsername = preference.getString(KEY_GMAIL_USERNAME);
-            gmailPassword = preference.getString(KEY_GMAIL_PASSWORD);
+            gmailUsername = preference.getString(Preference.KEY_EMAIL_USERNAME);
+            gmailPassword = preference.getString(Preference.KEY_EMAIL_PASSWORD);
         }
 
         final Properties properties = new Properties();
