@@ -1,7 +1,6 @@
 package com.theah64.sg.api_server.utils;
 
 
-import com.theah64.sg.api_server.database.Connection;
 import com.theah64.sg.api_server.database.tables.Preference;
 
 import javax.mail.*;
@@ -14,11 +13,7 @@ import java.util.Properties;
  */
 public class MailHelper {
 
-    private static final String BASE_URL = Connection.isDebugMode() ? "http://localhost:8080" : "http://gpix-shifz.rhcloud.com";
-
-
     private static String gmailUsername, gmailPassword;
-
 
     public static boolean sendMail(String email, final String subject, String message) {
 
