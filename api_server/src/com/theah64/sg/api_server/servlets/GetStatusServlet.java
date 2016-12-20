@@ -22,7 +22,6 @@ import java.io.IOException;
 @WebServlet(urlPatterns = {AdvancedBaseServlet.VERSION_CODE + "/get_status"})
 public class GetStatusServlet extends AdvancedBaseServlet {
 
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doPost(req, resp);
