@@ -2,10 +2,12 @@ DROP DATABASE IF EXISTS sg;
 CREATE DATABASE IF NOT EXISTS sg;
 USE sg;
 
+ALTER DATABASE `sg` DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
+
 DROP TABLE IF EXISTS servers;
 CREATE TABLE IF NOT EXISTS servers(
   id INT NOT NULL AUTO_INCREMENT,
-  name VARCHAR(10) NOT NULL,
+  name VARCHAR(100) NOT NULL,
   imei VARCHAR (20) NOT NULL,
   device_name VARCHAR (50) NOT NULL,
   device_hash TEXT NOT NULL,
@@ -18,7 +20,6 @@ CREATE TABLE IF NOT EXISTS servers(
   PRIMARY KEY(id)
   );
 
-  INSERT INTO servers (name,imei,device_name,device_hash,server_key,fcm_id) VALUES ('testDevice','1234567890','testDeviceName','testDeviceHash','testServerKey','testFcmId');
 
 
 
@@ -32,7 +33,6 @@ CREATE TABLE users(
    PRIMARY KEY (id)
    );
 
-   INSERT INTO users (email,api_key) VALUES  ('test@email.com','testApiKey');
 
 CREATE TABLE sms_requests(
   id INT NOT NULL AUTO_INCREMENT,
