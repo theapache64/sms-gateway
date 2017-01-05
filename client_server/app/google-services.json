@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "420582090772",
+    "firebase_url": "https://smsgateway-9a18f.firebaseio.com",
+    "project_id": "smsgateway-9a18f",
+    "storage_bucket": "smsgateway-9a18f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:420582090772:android:5818cdb0f59a31d1",
+        "android_client_info": {
+          "package_name": "com.theah64.smsgatewayserver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "420582090772-pn3m7to51g7jccv3p6h3d9m6of142hr8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.theah64.smsgatewayserver",
+            "certificate_hash": "243F99B5BBF8E02A8883BDC245CF61B8A6155C36"
+          }
+        },
+        {
+          "client_id": "420582090772-bvt0oip214lhuh41tjqc6lvad5l3m72n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATf9pJ91cpwHETF_0uBDaHkPyi9FhrH10"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "420582090772-bvt0oip214lhuh41tjqc6lvad5l3m72n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
