@@ -13,9 +13,10 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.theah64.smsgatewayserver.async.FCMSynchronizer;
 import com.theah64.smsgatewayserver.models.Server;
 import com.theah64.smsgatewayserver.utils.APIRequestGateway;
+import com.theah64.smsgatewayserver.utils.PermissionUtils;
 import com.theah64.smsgatewayserver.utils.PrefUtils;
 
-public class InstanceIdService extends FirebaseInstanceIdService {
+public class InstanceIdService extends FirebaseInstanceIdService implements PermissionUtils.Callback {
     private static final String X = InstanceIdService.class.getSimpleName();
 
     @Override
@@ -29,17 +30,7 @@ public class InstanceIdService extends FirebaseInstanceIdService {
         prefEditor.putBoolean(Server.KEY_IS_FCM_SYNCED, false);
         prefEditor.commit();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-                doNormalWork();
-            } else {
-                Log.e(X, "Permission not yet granted");
-            }
-
-        } else {
-            doNormalWork();
-        }
+        new PermissionUtils(this).begin();
     }
 
     private void doNormalWork() {
@@ -59,4 +50,13 @@ public class InstanceIdService extends FirebaseInstanceIdService {
     }
 
 
+    @Override
+    public void onAllPermissionGranted() {
+        doNormalWork();
+    }
+
+    @Override
+    public void onPermissionDenial() {
+        Log.e(X, "Permission not yet granted");
+    }
 }

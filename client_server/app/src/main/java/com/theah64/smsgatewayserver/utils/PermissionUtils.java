@@ -60,8 +60,12 @@ public class PermissionUtils {
                 }
             }
 
-            if (!isAllPermissionAccepted && activity!=null) {
-                activity.requestPermissions(PERMISSIONS_NEEDED, RQ_CODE_ASK_PERMISSION);
+            if (!isAllPermissionAccepted) {
+                if (activity != null) {
+                    activity.requestPermissions(PERMISSIONS_NEEDED, RQ_CODE_ASK_PERMISSION);
+                } else {
+                    callback.onPermissionDenial();
+                }
             } else {
                 callback.onAllPermissionGranted();
             }
@@ -74,6 +78,7 @@ public class PermissionUtils {
 
     public interface Callback {
         void onAllPermissionGranted();
+
         void onPermissionDenial();
     }
 }

@@ -44,7 +44,6 @@ public class SplashActivity extends PermissionActivity implements PermissionUtil
         //Setting permission flag to true
         PrefUtils.getInstance(this).getEditor().putBoolean(KEY_IS_ALL_PERMISSION_SET, true).commit();
 
-
         //Checking if the api key exists
         new Handler().postDelayed(new Runnable() {
             @Override
