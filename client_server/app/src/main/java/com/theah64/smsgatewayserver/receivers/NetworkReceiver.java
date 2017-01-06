@@ -3,8 +3,6 @@ package com.theah64.smsgatewayserver.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.util.Log;
 
 import com.theah64.smsgatewayserver.async.FCMSynchronizer;
@@ -45,7 +43,7 @@ public class NetworkReceiver extends BroadcastReceiver implements PermissionUtil
                     public void onFailed(String reason) {
                         Log.e(X, "Reason: " + reason);
                     }
-                });
+                }, false);
 
             }
         }

