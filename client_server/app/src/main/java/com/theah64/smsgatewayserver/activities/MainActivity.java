@@ -9,12 +9,28 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.theah64.smsgatewayserver.R;
+import com.theah64.smsgatewayserver.utils.APIRequestGateway;
 
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     private boolean isProcessing = false;
+    private FloatingActionButton fab;
+
+    public boolean isProcessing() {
+        return isProcessing;
+    }
+
+    public void setProcessing(boolean processing) {
+        isProcessing = processing;
+
+        if (isProcessing) {
+            fab.hide();
+        } else {
+            fab.show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,16 +42,32 @@ public class MainActivity extends AppCompatActivity {
         final TextView tvLog = (TextView) findViewById(R.id.tvLog);
         final ScrollView svMain = (ScrollView) findViewById(R.id.content_main);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (!isProcessing) {
+                if (!isProcessing()) {
                     //Connect to the API
                     log("-------------------------");
                     log("Connecting...");
-                    isProcessing = true;
+                    setProcessing(true);
+
+                    new APIRequestGateway(MainActivity.this, new APIRequestGateway.APIRequestGatewayCallback() {
+                        @Override
+                        public void onReadyToRequest(String serverKey) {
+                            log("Connected: " + serverKey);
+                            log("-------------------------");
+                            setProcessing(false);
+                        }
+
+                        @Override
+                        public void onFailed(String reason) {
+                            log("Connection failed: " + reason);
+                            log("-------------------------");
+                            setProcessing(false);
+                        }
+                    });
 
 
                 } else {

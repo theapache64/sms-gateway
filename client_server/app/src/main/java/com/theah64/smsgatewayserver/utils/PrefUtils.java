@@ -6,29 +6,41 @@ import android.preference.PreferenceManager;
 
 
 /**
- * Created by shifar on 15/9/16.
+ * Created by theapache64 on 11/9/16.
  */
 public class PrefUtils {
-    private static final String X = PrefUtils.class.getSimpleName();
-    private static PrefUtils instance;
-    private final SharedPreferences pref;
 
-    private PrefUtils(final Context context) {
-        this.pref = PreferenceManager.getDefaultSharedPreferences(context);
+    private static PrefUtils instance;
+    private final SharedPreferences sharedPref;
+
+    private PrefUtils(Context context) {
+        this.sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public static PrefUtils getInstance(final Context context) {
+    public static PrefUtils getInstance(Context context) {
         if (instance == null) {
             instance = new PrefUtils(context);
         }
         return instance;
     }
 
-    public SharedPreferences getPref() {
-        return pref;
+    public void saveString(final String key, final String value) {
+        getEditor().putString(key, value).commit();
     }
 
     public SharedPreferences.Editor getEditor() {
-        return pref.edit();
+        return sharedPref.edit();
+    }
+
+    public String getString(String key) {
+        return this.sharedPref.getString(key, null);
+    }
+
+    public boolean getBoolean(String key) {
+        return this.sharedPref.getBoolean(key, false);
+    }
+
+    public void saveBoolean(String key, Boolean value) {
+        this.sharedPref.edit().putBoolean(key, value).commit();
     }
 }

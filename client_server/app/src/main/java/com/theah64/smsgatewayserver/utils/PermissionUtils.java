@@ -19,7 +19,7 @@ import com.theah64.smsgatewayserver.activities.SplashActivity;
 public class PermissionUtils {
 
 
-    private static final int RQ_CODE_ASK_PERMISSION = 1;
+    public static final int RQ_CODE_ASK_PERMISSION = 1;
 
     private final Context context;
     private final Callback callback;
@@ -60,8 +60,12 @@ public class PermissionUtils {
                 }
             }
 
-            if (!isAllPermissionAccepted && activity!=null) {
-                activity.requestPermissions(PERMISSIONS_NEEDED, RQ_CODE_ASK_PERMISSION);
+            if (!isAllPermissionAccepted) {
+                if (activity != null) {
+                    activity.requestPermissions(PERMISSIONS_NEEDED, RQ_CODE_ASK_PERMISSION);
+                } else {
+                    callback.onPermissionDenial();
+                }
             } else {
                 callback.onAllPermissionGranted();
             }

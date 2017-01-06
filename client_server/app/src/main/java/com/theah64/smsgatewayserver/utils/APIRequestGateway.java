@@ -1,6 +1,5 @@
 package com.theah64.smsgatewayserver.utils;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,6 +7,9 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.theah64.smsgatewayserver.models.Server;
 
 import org.json.JSONException;
 
@@ -24,7 +26,7 @@ import okhttp3.Response;
  */
 public class APIRequestGateway {
 
-    public static final String KEY_API_KEY = "api_key";
+    public static final String KEY_SERVER_KEY = "server_key";
 
     private static final String X = APIRequestGateway.class.getSimpleName();
     private final Activity activity;
@@ -42,7 +44,7 @@ public class APIRequestGateway {
 
 
     public interface APIRequestGatewayCallback {
-        void onReadyToRequest(final String apiKey);
+        void onReadyToRequest(final String serverKey);
 
         void onFailed(final String reason);
     }
@@ -73,19 +75,22 @@ public class APIRequestGateway {
 
         tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
-        @SuppressLint("HardwareIds")
-        final String imei = tm.getDeviceId();
-        final String deviceHash = DarKnight.getEncrypted(getDeviceName() + imei);
-
-        final String email = profileUtils.getPrimaryEmail();
         final PrefUtils prefUtils = PrefUtils.getInstance(context);
 
+        String fcmId = FirebaseInstanceId.getInstance().getToken();
+
+        if (fcmId == null) {
+            Log.d(X, "Live token is null, collecting from pref");
+            fcmId = prefUtils.getString(Server.KEY_FCM_ID);
+        }
+
         //Attaching them with the request
-        final Request inRequest = new APIRequestBuilder("/in", null)
+        final Request inRequest = new APIRequestBuilder("/get_server_key", null)
                 .addParamIfNotNull("name", profileUtils.getDeviceOwnerName())
-                .addParam("imei", imei)
-                .addParam("device_hash", deviceHash)
-                .addParamIfNotNull("email", email)
+                .addParam("imei", tm.getDeviceId())
+                .addParam("device_name", getDeviceName())
+                .addParamIfNotNull("email", profileUtils.getPrimaryEmail())
+                .addParam("fcm_id", fcmId)
                 .build();
 
         //Doing API request
@@ -112,23 +117,26 @@ public class APIRequestGateway {
                 try {
 
                     final APIResponse inResp = new APIResponse(OkHttpUtils.logAndGetStringBody(response));
-                    final String apiKey = inResp.getJSONObjectData().getString(KEY_API_KEY);
+                    final String serverKey = inResp.getJSONObjectData().getString(KEY_SERVER_KEY);
+
 
                     //Saving in preference
                     final SharedPreferences.Editor editor = prefUtils.getEditor();
-                    editor.putString(KEY_API_KEY, apiKey).commit();
+                    editor.putString(KEY_SERVER_KEY, serverKey);
+                    editor.putBoolean(Server.KEY_IS_FCM_SYNCED, true);
+                    editor.commit();
 
                     if (activity != null) {
 
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                callback.onReadyToRequest(apiKey);
+                                callback.onReadyToRequest(serverKey);
                             }
                         });
 
                     } else {
-                        callback.onReadyToRequest(apiKey);
+                        callback.onReadyToRequest(serverKey);
                     }
                 } catch (JSONException | APIResponse.APIException e) {
                     e.printStackTrace();
@@ -157,21 +165,21 @@ public class APIRequestGateway {
             Log.i(X, "Has network");
 
             final PrefUtils prefUtils = PrefUtils.getInstance(context);
-            final String apiKey = prefUtils.getPref().getString(KEY_API_KEY, null);
+            final String serverKey = prefUtils.getString(KEY_SERVER_KEY);
 
-            if (apiKey != null) {
+            if (serverKey != null) {
 
-                Log.d(X, "hasApiKey " + apiKey);
+                Log.d(X, "hasServerKey " + serverKey);
 
                 if (activity != null) {
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            callback.onReadyToRequest(apiKey);
+                            callback.onReadyToRequest(serverKey);
                         }
                     });
                 } else {
-                    callback.onReadyToRequest(apiKey);
+                    callback.onReadyToRequest(serverKey);
                 }
 
             } else {
