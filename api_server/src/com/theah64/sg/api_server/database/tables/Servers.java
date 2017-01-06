@@ -18,6 +18,7 @@ public class Servers extends BaseTable<Server> {
     public static final String COLUMN_DEVICE_NAME = "device_name";
     public static final String COLUMN_SERVER_KEY = "server_key";
     private static final Servers instance = new Servers();
+    public static final String COLUMN_EMAIL = "email";
 
     private Servers() {
         super("servers");
@@ -37,7 +38,7 @@ public class Servers extends BaseTable<Server> {
     @Override
     public boolean add(Server server) throws InsertFailedException {
         boolean isFailed = false;
-        final String query = "INSERT INTO servers (name, device_name, imei,device_hash, fcm_id, server_key) VALUES (?,?,?,?,?,?); ";
+        final String query = "INSERT INTO servers (name, device_name, imei,device_hash, fcm_id, server_key,email) VALUES (?,?,?,?,?,?,?); ";
 
         final java.sql.Connection con = Connection.getConnection();
 
@@ -51,6 +52,8 @@ public class Servers extends BaseTable<Server> {
             ps.setString(4, server.getDeviceHash());
             ps.setString(5, server.getFcmId());
             ps.setString(6, server.getServerKey());
+            ps.setString(7, server.getEmail());
+
 
             isFailed = ps.executeUpdate() != 1;
             ps.close();
@@ -88,7 +91,7 @@ public class Servers extends BaseTable<Server> {
                 final String id = rs.getString(COLUMN_ID);
                 final String name = rs.getString(COLUMN_NAME);
                 final String fcmId = rs.getString(COLUMN_FCM_ID);
-                server = new Server(id, name, null, null, null, fcmId, null);
+                server = new Server(id, name, null, null, null, null, fcmId, null);
 
             }
             rs.close();

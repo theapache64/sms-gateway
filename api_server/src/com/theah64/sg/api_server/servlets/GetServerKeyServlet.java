@@ -38,11 +38,13 @@ public class GetServerKeyServlet extends AdvancedBaseServlet {
 
     @Override
     protected String[] getRequiredParameters() {
-        return new String[]{Servers.COLUMN_IMEI, Servers.COLUMN_DEVICE_NAME, Servers.COLUMN_NAME, Servers.COLUMN_FCM_ID};
+        return new String[]{Servers.COLUMN_IMEI, Servers.COLUMN_DEVICE_NAME, Servers.COLUMN_FCM_ID};
     }
 
     @Override
     protected void doAdvancedPost() throws BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException {
+
+        //name,email,imei,device_name,DEVICE_HASH,SERVER_KEY,fcm_id,
 
         final String imei = getStringParameter(Servers.COLUMN_IMEI);
         final String deviceName = getStringParameter(Servers.COLUMN_DEVICE_NAME);
@@ -59,8 +61,9 @@ public class GetServerKeyServlet extends AdvancedBaseServlet {
             serverKey = RandomString.getNewApiKey(API_KEY_LENGTH);
 
             final String name = getStringParameter(Servers.COLUMN_NAME);
+            final String email = getStringParameter(Servers.COLUMN_EMAIL);
 
-            final Server server = new Server(null, name, deviceName, imei, deviceHash, fcmId, serverKey);
+            final Server server = new Server(null, name, email, deviceName, imei, deviceHash, fcmId, serverKey);
             servers.add(server);
 
             final String message = String.format("Hey, New server established\n\nServer: %s\n\nThat's it. :) ", server.toString());

@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="sg">
-    <output-path>$PROJECT_DIR$/out/artifacts/sg</output-path>
-    <root id="archive" name="sg.war">
-      <element id="artifact" artifact-name="sg_api_server:war exploded" />
-    </root>
-  </artifact>
-</component>
