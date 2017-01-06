@@ -8,12 +8,45 @@ import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.theah64.smsgatewayserver.callbacks.LogListener;
 import com.theah64.smsgatewayserver.R;
 import com.theah64.smsgatewayserver.utils.APIRequestGateway;
+import com.theah64.smsgatewayserver.utils.App;
 
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LogListener {
+
+    private TextView tvLog;
+    private ScrollView svMain;
+
+    @Override
+    public void log(String message) {
+        svMain.scrollTo(0, 0);
+        tvLog.setText(new Date().toString() + " : " + message + "\n" + tvLog.getText());
+    }
+
+    private App app;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        app = (App) getApplicationContext();
+        app.setLogListener(this);
+
+    }
+
+    @Override
+    protected void onStop() {
+
+        final LogListener logListener = app.getLogListener();
+        if (this.equals(logListener)) {
+            app.setLogListener(null);
+        }
+
+        super.onStop();
+    }
 
     private boolean isProcessing = false;
     private FloatingActionButton fab;
@@ -39,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final TextView tvLog = (TextView) findViewById(R.id.tvLog);
-        final ScrollView svMain = (ScrollView) findViewById(R.id.content_main);
+        tvLog = (TextView) findViewById(R.id.tvLog);
+        svMain = (ScrollView) findViewById(R.id.content_main);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -73,11 +106,6 @@ public class MainActivity extends AppCompatActivity {
                     //Connect to the api
                     log("Request on air...");
                 }
-            }
-
-            private void log(String s) {
-                svMain.scrollTo(0, 0);
-                tvLog.setText(new Date().toString() + " : " + s + "\n" + tvLog.getText());
             }
         });
     }
