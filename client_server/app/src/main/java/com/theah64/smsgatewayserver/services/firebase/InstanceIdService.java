@@ -43,7 +43,7 @@ public class InstanceIdService extends FirebaseInstanceIdService implements Perm
 
             @Override
             public void onFailed(String reason) {
-
+                Log.e(X, "Reason : " + reason);
             }
         });
 
