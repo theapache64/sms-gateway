@@ -6,13 +6,21 @@ package com.theah64.sg.api_server.models;
  */
 public class Server {
 
-    private final String name,email, deviceName, imei, deviceHash, fcmId, serverKey;
+    private String name;
+    private String email;
+    private String simSerial;
+    private final String deviceName;
+    private final String imei;
+    private final String serverKey;
+    private final String deviceHash;
+    private String fcmId;
     private String id;
 
-    public Server(String id, String name, String email, String deviceName, String imei, String deviceHash, String fcmId, String serverKey) {
+    public Server(String id, String name, String email, String simSerial, String deviceName, String imei, String deviceHash, String fcmId, String serverKey) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.simSerial = simSerial;
         this.deviceName = deviceName;
         this.imei = imei;
         this.deviceHash = deviceHash;
@@ -22,6 +30,10 @@ public class Server {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getSimSerial() {
+        return simSerial;
     }
 
     public String getName() {
@@ -48,20 +60,39 @@ public class Server {
         return serverKey;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "Server{" +
                 "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", simSerial='" + simSerial + '\'' +
                 ", deviceName='" + deviceName + '\'' +
                 ", imei='" + imei + '\'' +
                 ", deviceHash='" + deviceHash + '\'' +
                 ", fcmId='" + fcmId + '\'' +
                 ", serverKey='" + serverKey + '\'' +
+                ", id='" + id + '\'' +
                 '}';
     }
 
-    public String getId() {
-        return id;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setSimSerial(String simSerial) {
+        this.simSerial = simSerial;
+    }
+
+    public void setFcmId(String fcmId) {
+        this.fcmId = fcmId;
     }
 }
 

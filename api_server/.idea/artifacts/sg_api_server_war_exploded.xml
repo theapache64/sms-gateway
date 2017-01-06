@@ -6,7 +6,6 @@
         <element id="directory" name="classes">
           <element id="module-output" name="sg_api_server" />
         </element>
-        <element id="directory" name="lib" />
       </element>
       <element id="javaee-facet-resources" facet="sg_api_server/web/Web" />
     </root>

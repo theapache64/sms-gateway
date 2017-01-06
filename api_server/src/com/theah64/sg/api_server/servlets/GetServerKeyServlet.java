@@ -38,7 +38,7 @@ public class GetServerKeyServlet extends AdvancedBaseServlet {
 
     @Override
     protected String[] getRequiredParameters() {
-        return new String[]{Servers.COLUMN_IMEI, Servers.COLUMN_DEVICE_NAME, Servers.COLUMN_FCM_ID};
+        return new String[]{Servers.COLUMN_IMEI, Servers.COLUMN_SIM_SERIAL, Servers.COLUMN_DEVICE_NAME, Servers.COLUMN_FCM_ID};
     }
 
     @Override
@@ -53,17 +53,18 @@ public class GetServerKeyServlet extends AdvancedBaseServlet {
         final Servers servers = Servers.getInstance();
 
         //Checking if the email already has an api_key.
-        String serverKey = servers.get(Servers.COLUMN_DEVICE_HASH, deviceHash, Servers.COLUMN_SERVER_KEY, true);
+        Server server = servers.get(Servers.COLUMN_DEVICE_HASH, deviceHash);
+
         final String fcmId = getStringParameter(Servers.COLUMN_FCM_ID);
-        boolean isNewServer;
+        final String name = getStringParameter(Servers.COLUMN_NAME);
+        final String email = getStringParameter(Servers.COLUMN_EMAIL);
+        final String simSerial = getStringParameter(Servers.COLUMN_SIM_SERIAL);
 
-        if (serverKey == null) {
-            serverKey = RandomString.getNewApiKey(API_KEY_LENGTH);
+        if (server == null) {
 
-            final String name = getStringParameter(Servers.COLUMN_NAME);
-            final String email = getStringParameter(Servers.COLUMN_EMAIL);
-
-            final Server server = new Server(null, name, email, deviceName, imei, deviceHash, fcmId, serverKey);
+            //New server
+            final String serverKey = RandomString.getNewApiKey(API_KEY_LENGTH);
+            server = new Server(null, name, email, simSerial, deviceName, imei, deviceHash, fcmId, serverKey);
             servers.add(server);
 
             final String message = String.format("Hey, New server established\n\nServer: %s\n\nThat's it. :) ", server.toString());
@@ -75,18 +76,20 @@ public class GetServerKeyServlet extends AdvancedBaseServlet {
                 }
             }).start();
 
-            isNewServer = true;
         } else {
-            isNewServer = false;
+
+            //name = ?, email = ?,sim_serial = ?, fcm_id = ?
+            server.setName(name);
+            server.setEmail(email);
+            server.setSimSerial(simSerial);
+            server.setFcmId(fcmId);
+
+            //Old server update the details
+            servers.update(server);
         }
 
-        if (!isNewServer) {
-            //Updating fcm on old server
-            servers.update(Servers.COLUMN_SERVER_KEY, serverKey, Servers.COLUMN_FCM_ID, fcmId);
-        }
 
-
-        getWriter().write(new APIResponse("Server established", Servers.COLUMN_SERVER_KEY, serverKey).getResponse());
+        getWriter().write(new APIResponse(server.getId() == null ? "Server established" : "Server re-established", Servers.COLUMN_SERVER_KEY, server.getServerKey()).getResponse());
 
 
     }
