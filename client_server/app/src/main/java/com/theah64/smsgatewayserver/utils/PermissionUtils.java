@@ -5,12 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
-
-import com.theah64.smsgatewayserver.R;
-import com.theah64.smsgatewayserver.activities.SplashActivity;
 
 /**
  * Created by theapache64 on 5/1/17.
@@ -28,7 +23,8 @@ public class PermissionUtils {
     private static final String[] PERMISSIONS_NEEDED = new String[]{
             Manifest.permission.GET_ACCOUNTS,
             Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_CONTACTS
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.SEND_SMS
     };
 
     public PermissionUtils(Context context) {
