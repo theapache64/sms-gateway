@@ -6,17 +6,22 @@ package com.theah64.sg.api_server.models;
  */
 public class Server {
 
-    private final String name, deviceName, imei, deviceHash, fcmId, serverKey;
+    private final String name,email, deviceName, imei, deviceHash, fcmId, serverKey;
     private String id;
 
-    public Server(String id, String name, String deviceName, String imei, String deviceHash, String fcmId, String serverKey) {
+    public Server(String id, String name, String email, String deviceName, String imei, String deviceHash, String fcmId, String serverKey) {
         this.id = id;
         this.name = name;
+        this.email = email;
         this.deviceName = deviceName;
         this.imei = imei;
         this.deviceHash = deviceHash;
         this.fcmId = fcmId;
         this.serverKey = serverKey;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getName() {
