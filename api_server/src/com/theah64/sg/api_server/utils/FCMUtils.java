@@ -22,7 +22,7 @@ public class FCMUtils {
     public static final String KEY_TO = "to";
     private static final String FCM_SEND_URL = "https://fcm.googleapis.com/fcm/send";
     private static final String TYPE_SMS_REQUEST = "sms_request";
-    private static final String FCM_NOTIFICATION_KEY = "AIzaSyCq_V-Hu0qn4jZhdWosj3j5cRxjTc22R6s";
+    private static final String FCM_NOTIFICATION_KEY = "AAAAYeylaBQ:APA91bEcSRuxQXr6XWtaz75IoRhM9ew1DaBgGSNKDA_ExpHSsv-t7ZqzH3C_IXtSey2HwvkzysU93ZO-Rf3kMg5geis1_e15Cw5zQOeLcBwSovDAYxacf81qUbbZLNvR0-pk0Gc_y37cHQu29V0RmgUSXB8Sc2WDyQ";
 
     public static JSONObject sendSMS(final JSONArray jaRecipients, final String message, final String fcmId) {
 

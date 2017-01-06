@@ -91,6 +91,6 @@ CREATE TABLE IF NOT EXISTS preference (
 );
 
 INSERT INTO preference (id, _key, _value) VALUES
-(1, 'email_username', 'gpixofficial@gmail.com'),
-(2, 'email_password', 'thepassword'),
+(1, 'email_username', 'mymailer64@gmail.com'),
+(2, 'email_password', 'mypassword64'),
 (3, 'admin_email', 'theapache64@gmail.com');
