@@ -3,7 +3,6 @@ package com.theah64.smsgatewayserver.async;
 import android.content.Context;
 import android.util.Log;
 
-
 import com.theah64.smsgatewayserver.models.Server;
 import com.theah64.smsgatewayserver.utils.APIRequestBuilder;
 import com.theah64.smsgatewayserver.utils.APIRequestGateway;

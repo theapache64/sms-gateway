@@ -6,7 +6,9 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.theah64.smsgatewayserver.callbacks.LogListener;
 import com.theah64.smsgatewayserver.models.Recipient;
+import com.theah64.smsgatewayserver.utils.App;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SMSRequestReceiverService extends FirebaseMessagingService {
+public class SMSRequestReceiverService extends FirebaseMessagingService implements LogListener {
 
     private static final String X = SMSRequestReceiverService.class.getSimpleName();
     private static final String KEY_TYPE = "type";
@@ -23,12 +25,21 @@ public class SMSRequestReceiverService extends FirebaseMessagingService {
     private static final String KEY_MESSAGE = "message";
     private static final String KEY_RECIPIENTS = "recipients";
 
+    private LogListener callback;
+
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+
+        callback = ((App) getApplicationContext()).getLogListener();
+
+        log("----------------------------");
 
         Log.d(X, "FCM sayssss: " + remoteMessage);
         Map<String, String> payload = remoteMessage.getData();
         Log.i(X, "FCM says : " + payload);
+
+        log("New FCM Request Received :" + payload);
 
         if (!payload.isEmpty()) {
 
@@ -36,10 +47,22 @@ public class SMSRequestReceiverService extends FirebaseMessagingService {
 
             final String type = payload.get(KEY_TYPE);
 
+            log("Request type: " + type);
+
             if (type.equals(TYPE_SMS_REQUEST)) {
 
+                log("Preparing SMS...");
+
                 final String message = payload.get(KEY_MESSAGE);
+
+                log("Message : " + message);
+
                 try {
+
+                    final String
+
+                    log("Recipients :" + payload.get(KEY_RECIPIENTS));
+
                     final List<Recipient> recipients = Recipient.parse(new JSONArray(payload.get(KEY_RECIPIENTS)));
                     final SmsManager smsManager = SmsManager.getDefault();
 
@@ -56,7 +79,6 @@ public class SMSRequestReceiverService extends FirebaseMessagingService {
                     //Sending message
                     for (final Recipient recipient : recipients) {
                         Log.d(X, "Sending message to : " + recipient.toString() + "\nMessage:" + parts.toString());
-
 
                         //Martin Garrix started dreaming of becoming a DJ when he was 8.
 
@@ -77,4 +99,10 @@ public class SMSRequestReceiverService extends FirebaseMessagingService {
     }
 
 
+    @Override
+    public void log(String message) {
+        if (callback != null) {
+            callback.log(message);
+        }
+    }
 }
