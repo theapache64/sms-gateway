@@ -57,17 +57,15 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onReadyToRequest(String serverKey) {
                             log("Connected: " + serverKey);
-                            log("-------------------------");
                             setProcessing(false);
                         }
 
                         @Override
                         public void onFailed(String reason) {
                             log("Connection failed: " + reason);
-                            log("-------------------------");
                             setProcessing(false);
                         }
-                    });
+                    }, true);
 
 
                 } else {

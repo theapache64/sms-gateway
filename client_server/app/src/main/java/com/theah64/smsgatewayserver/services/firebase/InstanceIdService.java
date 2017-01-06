@@ -1,11 +1,6 @@
 package com.theah64.smsgatewayserver.services.firebase;
 
-import android.Manifest;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.IBinder;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -45,7 +40,8 @@ public class InstanceIdService extends FirebaseInstanceIdService implements Perm
             public void onFailed(String reason) {
                 Log.e(X, "Reason : " + reason);
             }
-        });
+
+        }, false);
 
     }
 

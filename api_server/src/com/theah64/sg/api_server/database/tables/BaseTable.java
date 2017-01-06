@@ -117,6 +117,8 @@ public class BaseTable<T> {
     public String get(String byColumn, String byValue, String columnToReturn, final boolean isActive) {
 
         final String query = String.format("SELECT %s FROM %s WHERE %s = ? %s ORDER BY id DESC LIMIT 1", columnToReturn, tableName, byColumn, isActive ? " AND is_active = 1 " : "");
+        final String query2 = String.format("SELECT %s FROM %s WHERE %s = %s %s ORDER BY id DESC LIMIT 1", columnToReturn, tableName, byColumn, byValue, isActive ? " AND is_active = 1 " : "");
+        System.out.println(query2);
 
         String resultValue = null;
         final java.sql.Connection con = Connection.getConnection();
