@@ -19,7 +19,7 @@ import com.theah64.smsgatewayserver.activities.SplashActivity;
 public class PermissionUtils {
 
 
-    private static final int RQ_CODE_ASK_PERMISSION = 1;
+    public static final int RQ_CODE_ASK_PERMISSION = 1;
 
     private final Context context;
     private final Callback callback;
@@ -74,7 +74,6 @@ public class PermissionUtils {
 
     public interface Callback {
         void onAllPermissionGranted();
-
         void onPermissionDenial();
     }
 }

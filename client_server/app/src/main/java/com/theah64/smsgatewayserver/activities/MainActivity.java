@@ -9,6 +9,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.theah64.smsgatewayserver.R;
+import com.theah64.smsgatewayserver.utils.APIRequestGateway;
 
 import java.util.Date;
 
@@ -36,6 +37,22 @@ public class MainActivity extends AppCompatActivity {
                     log("-------------------------");
                     log("Connecting...");
                     isProcessing = true;
+
+                    new APIRequestGateway(MainActivity.this, new APIRequestGateway.APIRequestGatewayCallback() {
+                        @Override
+                        public void onReadyToRequest(String serverKey) {
+                            log("Connected: " + serverKey);
+                            log("-------------------------");
+                            isProcessing = false;
+                        }
+
+                        @Override
+                        public void onFailed(String reason) {
+                            log("Connection failed: " + reason);
+                            log("-------------------------");
+                            isProcessing = false;
+                        }
+                    });
 
 
                 } else {

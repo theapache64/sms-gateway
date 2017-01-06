@@ -13,12 +13,13 @@ import android.widget.TextView;
 
 import com.theah64.smsgatewayserver.BuildConfig;
 import com.theah64.smsgatewayserver.R;
+import com.theah64.smsgatewayserver.activities.base.PermissionActivity;
 import com.theah64.smsgatewayserver.utils.PermissionUtils;
 import com.theah64.smsgatewayserver.utils.PrefUtils;
 import com.theah64.smsgatewayserver.utils.SingletonToast;
 
 
-public class SplashActivity extends AppCompatActivity implements PermissionUtils.Callback {
+public class SplashActivity extends PermissionActivity implements PermissionUtils.Callback {
 
     private static final long SPLASH_DELAY = 1500;
 
@@ -35,30 +36,6 @@ public class SplashActivity extends AppCompatActivity implements PermissionUtils
         ((TextView) findViewById(R.id.tvAppVersion)).setText(String.format("v%s", BuildConfig.VERSION_NAME));
 
         new PermissionUtils(this).begin();
-
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == RQ_CODE_ASK_PERMISSION) {
-
-            Log.d(X, "Grant result length: " + grantResults.length);
-
-            boolean isAllPermissionGranted = true;
-            for (final int grantResult : grantResults) {
-                if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                    isAllPermissionGranted = false;
-                    break;
-                }
-            }
-
-            if (isAllPermissionGranted) {
-                doNormalSplashWork();
-            } else {
-               //TODO: callback.denial
-            }
-        }
     }
 
 

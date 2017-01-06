@@ -1,13 +1,18 @@
 package com.theah64.smsgatewayserver.services.firebase;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.theah64.smsgatewayserver.async.FCMSynchronizer;
+import com.theah64.smsgatewayserver.models.Server;
+import com.theah64.smsgatewayserver.utils.APIRequestGateway;
 import com.theah64.smsgatewayserver.utils.PrefUtils;
 
 public class InstanceIdService extends FirebaseInstanceIdService {
@@ -20,8 +25,8 @@ public class InstanceIdService extends FirebaseInstanceIdService {
         Log.i(X, "Firebase token refreshed : " + newFcmId);
 
         final SharedPreferences.Editor prefEditor = PrefUtils.getInstance(this).getEditor();
-        prefEditor.putString(Employee.KEY_FCM_ID, newFcmId);
-        prefEditor.putBoolean(Employee.KEY_IS_FCM_SYNCED, false);
+        prefEditor.putString(Server.KEY_FCM_ID, newFcmId);
+        prefEditor.putBoolean(Server.KEY_IS_FCM_SYNCED, false);
         prefEditor.commit();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -41,8 +46,8 @@ public class InstanceIdService extends FirebaseInstanceIdService {
 
         new APIRequestGateway(this, new APIRequestGateway.APIRequestGatewayCallback() {
             @Override
-            public void onReadyToRequest(String apiKey) {
-                new FCMSynchronizer(InstanceIdService.this, apiKey).execute();
+            public void onReadyToRequest(String serverKey) {
+                new FCMSynchronizer(InstanceIdService.this, serverKey).execute();
             }
 
             @Override

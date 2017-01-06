@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "420582090772-f2k9vcajl7ed26p4ftfimsmlvilf0078.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.theah64.smsgatewayserver",
+            "certificate_hash": "DF8ED6C74AEC0597F581C4E6F3FDD8A3D2411C8B"
+          }
+        },
+        {
           "client_id": "420582090772-pn3m7to51g7jccv3p6h3d9m6of142hr8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
