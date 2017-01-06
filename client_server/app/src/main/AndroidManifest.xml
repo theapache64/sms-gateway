@@ -47,6 +47,18 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <receiver
+            android:name=".receivers.NetworkReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter android:priority="9999">
+
+                <!-- TODO Got to fix this warning -->
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        
     </application>
 
 </manifest>
