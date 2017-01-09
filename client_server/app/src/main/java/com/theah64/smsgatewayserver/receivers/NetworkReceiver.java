@@ -56,6 +56,6 @@ public class NetworkReceiver extends BroadcastReceiver implements PermissionUtil
 
     @Override
     public void onPermissionDenial() {
-
+        Log.e(X, "Permission denied");
     }
 }

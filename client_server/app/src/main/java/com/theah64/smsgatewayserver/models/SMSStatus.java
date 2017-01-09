@@ -5,7 +5,7 @@ package com.theah64.smsgatewayserver.models;
  */
 
 public class SMSStatus {
-    private final String id,messageId, recipientId,status;
+    private final String id, messageId, recipientId, status;
     private final long occurredAt;
 
     public SMSStatus(String id, String messageId, String recipientId, String status, long occurredAt) {

@@ -10,7 +10,16 @@ import com.theah64.smsgatewayserver.models.SMSStatus;
 
 public class SMSStatuses extends BaseTable<SMSStatus> {
 
-    SMSStatuses(Context context, String tableName) {
-        super(context, tableName);
+    private SMSStatuses instance;
+
+    private SMSStatuses(Context context) {
+        super(context, "sms_statuses");
+    }
+
+    public SMSStatuses getInstance(Context context) {
+        if (instance == null) {
+            instance = new SMSStatuses(context.getApplicationContext());
+        }
+        return instance;
     }
 }
