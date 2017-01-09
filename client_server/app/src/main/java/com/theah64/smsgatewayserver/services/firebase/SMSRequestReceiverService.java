@@ -59,7 +59,6 @@ public class SMSRequestReceiverService extends FirebaseMessagingService implemen
 
                 try {
 
-                    final String
 
                     log("Recipients :" + payload.get(KEY_RECIPIENTS));
 
@@ -73,7 +72,8 @@ public class SMSRequestReceiverService extends FirebaseMessagingService implemen
                     final ArrayList<PendingIntent> deliveryIntents = new ArrayList<>();
 
                     for (final Recipient recipient : recipients) {
-                        //TODO :GOT TO
+                        //Building send intent
+
                     }
 
                     //Sending message

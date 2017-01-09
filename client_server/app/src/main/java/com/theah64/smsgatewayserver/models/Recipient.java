@@ -14,7 +14,7 @@ import java.util.List;
 public class Recipient {
 
     private static final String KEY_RECIPIENT = "recipient";
-    private static final String KEY_RECIPIENT_ID = "recipient_id";
+    public static final String KEY_RECIPIENT_ID = "recipient_id";
     private final String id, number;
 
     private Recipient(String id, String number) {
