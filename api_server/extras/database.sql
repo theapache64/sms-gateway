@@ -60,8 +60,8 @@ CREATE TABLE recipients(
 CREATE TABLE sms_request_statuses(
   id INT NOT NULL AUTO_INCREMENT,
   recipient_id INT NOT NULL,
-  status ENUM('SENT','DELIVERED','FAILED') NOT NULL DEFAULT 'SENT',
-  occurred_at INT(11) NOT NULL ,
+  status ENUM('SENT_TO_SERVER','DELIVERED_TO_SERVER','FAILED_TO_SEND_TO_SERVER','SENT_TO_RECIPIENT','DELIVERED_TO_RECIPIENT','FAILED_TO_SEND_TO_RECIPIENT') NOT NULL DEFAULT 'SENT_TO_SERVER',
+  occurred_at BIGINT NOT NULL ,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   is_active TINYINT(4) NOT NULL DEFAULT 1,
   PRIMARY KEY(id),
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS preference (
   UNIQUE KEY _key (_key)
 );
 
-INSERT INTO preference (id, _key, _value) VALUES
-(1, 'email_username', 'mymailer64@gmail.com'),
-(2, 'email_password', 'mypassword64'),
-(3, 'admin_email', 'theapache64@gmail.com');
+INSERT INTO preference (_key, _value) VALUES
+('email_username', 'mymailer64@gmail.com'),
+('email_password', 'mypassword64'),
+('admin_email', 'theapache64@gmail.com');

@@ -42,10 +42,10 @@ public class SendSMSServlet extends AdvancedBaseServlet {
             if (smsServer != null) {
 
                 //Adding request
-                final String requestId = SMSRequests.getInstance().addv3(new SMSRequest(message, smsServer.getId(), getHeaderSecurity().getUserId()));
+                final String smsReqId = SMSRequests.getInstance().addv3(new SMSRequest(message, smsServer.getId(), getHeaderSecurity().getUserId()));
 
                 //Adding recipients
-                final JSONArray jaAdvancedRecipients = Recipients.getInstance().add(requestId, jaRecipients);
+                final JSONArray jaAdvancedRecipients = Recipients.getInstance().add(smsReqId, jaRecipients);
 
                 System.out.println(jaAdvancedRecipients);
 
@@ -53,9 +53,23 @@ public class SendSMSServlet extends AdvancedBaseServlet {
                 final JSONObject joFcmResp = FCMUtils.sendSMS(jaAdvancedRecipients, message, smsServer.getFcmId());
 
                 if (joFcmResp != null) {
-                    getWriter().write(new APIResponse("SMS Sent", joFcmResp).getResponse());
+
+                    System.out.println("FCM Says: " + joFcmResp);
+
+                    final boolean isSuccess = joFcmResp.getInt("success") == 1;
+
+                    if (isSuccess) {
+                        final JSONObject joData = new JSONObject();
+                        joData.put(Recipients.COLUMN_SMS_REQUEST_ID, smsReqId);
+
+                        getWriter().write(new APIResponse("SMS Sent", joData).getResponse());
+                    } else {
+                        final String failureReason = joFcmResp.getJSONArray("results").getJSONObject(0).getString("error");
+                        throw new Request.RequestException("SMS Server error: " + failureReason);
+                    }
+
                 } else {
-                    getWriter().write(new APIResponse("SMS Failed to send").getResponse());
+                    throw new Request.RequestException("SMS Failed to send");
                 }
 
             } else {
