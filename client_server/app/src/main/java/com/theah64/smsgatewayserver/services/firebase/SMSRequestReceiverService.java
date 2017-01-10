@@ -1,6 +1,7 @@
 package com.theah64.smsgatewayserver.services.firebase;
 
 import android.app.PendingIntent;
+import android.content.Intent;
 import android.telephony.SmsManager;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.theah64.smsgatewayserver.callbacks.LogListener;
 import com.theah64.smsgatewayserver.models.Recipient;
+import com.theah64.smsgatewayserver.receivers.OnSMSSentReceiver;
 import com.theah64.smsgatewayserver.utils.App;
 
 import org.json.JSONArray;
@@ -72,7 +74,12 @@ public class SMSRequestReceiverService extends FirebaseMessagingService implemen
                     final ArrayList<PendingIntent> deliveryIntents = new ArrayList<>();
 
                     for (final Recipient recipient : recipients) {
-                        //Building send intent
+                        //Building sent intent
+                        final Intent sentIntent = new Intent(this, OnSMSSentReceiver.class);
+                        sentIntent.putExtra(Recipient.KEY_RECIPIENT_ID, recipient.getId());
+                        sentIntents.add(PendingIntent.getBroadcast(this, ))
+
+                        //Building delivery intents
 
                     }
 

@@ -31,7 +31,6 @@ public class SplashActivity extends PermissionActivity implements PermissionUtil
         new PermissionUtils(this, this, this).begin();
     }
 
-
     private void doNormalSplashWork() {
 
         //Setting permission flag to true
