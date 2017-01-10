@@ -21,9 +21,14 @@ public class MainActivity extends AppCompatActivity implements LogListener {
     private ScrollView svMain;
 
     @Override
-    public void log(String message) {
-        svMain.scrollTo(0, 0);
-        tvLog.setText(new Date().toString() + " : " + message + "\n" + tvLog.getText());
+    public void log(final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                svMain.scrollTo(0, 0);
+                tvLog.setText(new Date().toString() + " : " + message + "\n" + tvLog.getText());
+            }
+        });
     }
 
     private App app;

@@ -28,7 +28,7 @@ public class SplashActivity extends PermissionActivity implements PermissionUtil
 
         ((TextView) findViewById(R.id.tvAppVersion)).setText(String.format("v%s", BuildConfig.VERSION_NAME));
 
-        new PermissionUtils(this).begin();
+        new PermissionUtils(this, this, this).begin();
     }
 
 

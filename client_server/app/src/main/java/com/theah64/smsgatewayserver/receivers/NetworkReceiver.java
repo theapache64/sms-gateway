@@ -24,7 +24,7 @@ public class NetworkReceiver extends BroadcastReceiver implements PermissionUtil
     @Override
     public void onReceive(final Context context, Intent intent) {
         this.context = context;
-        new PermissionUtils(context).begin();
+        new PermissionUtils(context, this, null).begin();
     }
 
     private static void doNormalWork(final Context context) {

@@ -5,7 +5,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by theapache64 on 5/1/17.
@@ -27,21 +30,10 @@ public class PermissionUtils {
             Manifest.permission.SEND_SMS
     };
 
-    public PermissionUtils(Context context) {
+    public PermissionUtils(@NotNull Context context, @NotNull Callback callback, @Nullable Activity activity) {
         this.context = context;
-
-        if (context instanceof Callback) {
-            this.callback = (Callback) context;
-        } else {
-            throw new IllegalArgumentException("The context must implement PermissionUtils.Callback");
-        }
-
-        if (context instanceof Activity) {
-            this.activity = (Activity) context;
-        } else {
-            this.activity = null;
-        }
-
+        this.callback = callback;
+        this.activity = activity;
     }
 
     public void begin() {

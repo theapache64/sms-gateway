@@ -25,7 +25,7 @@ public class InstanceIdService extends FirebaseInstanceIdService implements Perm
         prefEditor.putBoolean(Server.KEY_IS_FCM_SYNCED, false);
         prefEditor.commit();
 
-        new PermissionUtils(this).begin();
+        new PermissionUtils(this, this, null).begin();
     }
 
     private void doNormalWork() {
