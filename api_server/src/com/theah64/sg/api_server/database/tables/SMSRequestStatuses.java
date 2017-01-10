@@ -74,6 +74,8 @@ public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
         JSONArray jaStatuses = null;
 
         final String query = "SELECT r.recipient, sqs.status, sqs.occurred_at FROM sms_request_statuses sqs INNER JOIN recipients r ON r.id = sqs.recipient_id INNER JOIN sms_requests sr ON r.sms_request_id = sr.id WHERE sr.id = ? AND sr.user_id = ? GROUP BY r.id;";
+        final String query2 = String.format("SELECT r.recipient, sqs.status, sqs.occurred_at FROM sms_request_statuses sqs INNER JOIN recipients r ON r.id = sqs.recipient_id INNER JOIN sms_requests sr ON r.sms_request_id = sr.id WHERE sr.id = %s AND sr.user_id = %s GROUP BY r.id;", requestId, userId);
+        System.out.println("Query: " + query2);
 
         final java.sql.Connection con = Connection.getConnection();
 

@@ -93,3 +93,12 @@ INSERT INTO preference (_key, _value) VALUES
 ('email_username', 'mymailer64@gmail.com'),
 ('email_password', 'mypassword64'),
 ('admin_email', 'theapache64@gmail.com');
+
+SELECT
+  r.recipient,
+  sqs.status,
+  sqs.occurred_at
+FROM sms_request_statuses sqs
+INNER JOIN recipients r ON r.id = sqs.recipient_id
+INNER JOIN sms_requests sr ON r.sms_request_id = sr.id WHERE sr.id = 49 AND sr.user_id = 1
+GROUP BY sqs.id;
