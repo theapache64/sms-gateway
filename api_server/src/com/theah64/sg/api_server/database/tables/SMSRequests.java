@@ -25,13 +25,14 @@ public class SMSRequests extends BaseTable<SMSRequest> {
     @Override
     public String addv3(SMSRequest request) throws InsertFailedException {
         String requestId = null;
-        final String query = "INSERT INTO sms_requests (message,server_id,user_id) VALUES (?,?,?);";
+        final String query = "INSERT INTO sms_requests (message,server_id,user_id,total_parts) VALUES (?,?,?,?);";
         final java.sql.Connection con = Connection.getConnection();
         try {
             final PreparedStatement ps = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, request.getMessage());
             ps.setString(2, request.getServerId());
             ps.setString(3, request.getUserId());
+            ps.setInt(4, request.getTotalParts());
             ps.executeUpdate();
             final ResultSet rs = ps.getGeneratedKeys();
             if (rs.first()) {

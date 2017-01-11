@@ -42,7 +42,7 @@ public class SendSMSServlet extends AdvancedBaseServlet {
             if (smsServer != null) {
 
                 //Adding request
-                final String smsReqId = SMSRequests.getInstance().addv3(new SMSRequest(message, smsServer.getId(), getHeaderSecurity().getUserId()));
+                final String smsReqId = SMSRequests.getInstance().addv3(new SMSRequest(message, smsServer.getId(), getHeaderSecurity().getUserId(), totalParts));
 
                 //Adding recipients
                 final JSONArray jaAdvancedRecipients = Recipients.getInstance().add(smsReqId, jaRecipients);

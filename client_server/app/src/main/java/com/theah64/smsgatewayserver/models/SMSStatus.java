@@ -6,23 +6,23 @@ package com.theah64.smsgatewayserver.models;
 
 public class SMSStatus {
 
-    private final String id, messageId, recipientId, status;
+    private final String id, recipientId, status,reason;
     private final long occurredAt;
 
-    public SMSStatus(String id, String messageId, String recipientId, String status, long occurredAt) {
+    public SMSStatus(String id, String recipientId, String status, String reason, long occurredAt) {
         this.id = id;
-        this.messageId = messageId;
         this.recipientId = recipientId;
         this.status = status;
+        this.reason = reason;
         this.occurredAt = occurredAt;
+    }
+
+    public String getReason() {
+        return reason;
     }
 
     public String getId() {
         return id;
-    }
-
-    public String getMessageId() {
-        return messageId;
     }
 
     public String getRecipientId() {

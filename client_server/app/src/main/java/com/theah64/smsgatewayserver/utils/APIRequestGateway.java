@@ -44,7 +44,7 @@ public class APIRequestGateway {
 
 
     public interface APIRequestGatewayCallback {
-        void onReadyToRequest(final String serverKey);
+        void onReadyToRequest(final String serverKey) throws JSONException;
 
         void onFailed(final String reason);
     }

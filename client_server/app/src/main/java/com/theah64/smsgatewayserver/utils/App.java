@@ -12,7 +12,7 @@ public class App extends Application {
 
     private LogListener logListener;
 
-    public static final boolean IS_DEBUG_MODE = false;
+    public static final boolean IS_DEBUG_MODE = true;
 
     @Override
     public void onCreate() {

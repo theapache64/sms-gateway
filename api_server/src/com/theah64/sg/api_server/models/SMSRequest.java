@@ -5,11 +5,13 @@ package com.theah64.sg.api_server.models;
  */
 public class SMSRequest {
     private final String message, serverId, userId;
+    private final int totalParts;
 
-    public SMSRequest(String message, String serverId, String userId) {
+    public SMSRequest(String message, String serverId, String userId, int totalParts) {
         this.message = message;
         this.serverId = serverId;
         this.userId = userId;
+        this.totalParts = totalParts;
     }
 
     public String getMessage() {
@@ -22,5 +24,9 @@ public class SMSRequest {
 
     public String getUserId() {
         return userId;
+    }
+
+    public int getTotalParts() {
+        return totalParts;
     }
 }

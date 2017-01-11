@@ -33,10 +33,12 @@ CREATE TABLE users(
    PRIMARY KEY (id)
    );
 
+INSERT INTO users (email,api_key) VALUES ('theapache64@gmail.com','testApiKey');
 
 CREATE TABLE sms_requests(
   id INT NOT NULL AUTO_INCREMENT,
   message TEXT CHARACTER SET UTF8 NOT NULL,
+  total_parts INT NOT NULL,
   server_id INT NOT NULL,
   user_id INT NOT NULL,
   is_active TINYINT(4) NOT NULL DEFAULT 1,

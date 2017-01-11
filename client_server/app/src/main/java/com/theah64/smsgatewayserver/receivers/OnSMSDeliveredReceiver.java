@@ -9,18 +9,18 @@ import com.theah64.smsgatewayserver.models.Recipient;
 
 public class OnSMSDeliveredReceiver extends BroadcastReceiver {
 
-    private static final String X = OnSMSSentReceiver.class.getSimpleName();
+    private static final String X = OnSMSDeliveredReceiver.class.getSimpleName();
 
     public OnSMSDeliveredReceiver() {
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(X, intent.getDataString());
+        Log.i(X, "Intent: " + intent);
 
         final String recipientId = intent.getStringExtra(Recipient.KEY_RECIPIENT_ID);
         Log.d(X, "RecipientID: " + recipientId);
- 
+
 
     }
 }

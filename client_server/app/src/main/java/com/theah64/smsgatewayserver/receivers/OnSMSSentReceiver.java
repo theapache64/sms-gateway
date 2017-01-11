@@ -16,7 +16,7 @@ public class OnSMSSentReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.i(X, intent.getDataString());
+        Log.i(X, "Intent: " + intent);
 
         final String recipientId = intent.getStringExtra(Recipient.KEY_RECIPIENT_ID);
         Log.d(X, "RecipientID: " + recipientId);
