@@ -38,7 +38,7 @@ public class GetApiKeyServlet extends AdvancedBaseServlet {
     }
 
     @Override
-    protected void doAdvancedPost() throws Request.RequestException, BaseTable.InsertFailedException {
+    protected void doAdvancedPost() throws RequestException, BaseTable.InsertFailedException {
 
         final String email = getStringParameter(Users.COLUMN_EMAIL);
 
@@ -75,12 +75,12 @@ public class GetApiKeyServlet extends AdvancedBaseServlet {
                 }
 
             } else {
-                throw new Request.RequestException("Failed to add new user");
+                throw new RequestException("Failed to add new user");
             }
 
 
         } else {
-            throw new Request.RequestException("Invalid email");
+            throw new RequestException("Invalid email");
         }
     }
 }

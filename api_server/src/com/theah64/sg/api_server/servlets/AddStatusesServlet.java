@@ -4,7 +4,7 @@ import com.theah64.sg.api_server.database.tables.BaseTable;
 import com.theah64.sg.api_server.database.tables.SMSRequestStatuses;
 import com.theah64.sg.api_server.models.SMSRequestStatus;
 import com.theah64.sg.api_server.utils.APIResponse;
-import com.theah64.sg.api_server.utils.Request;
+import com.theah64.sg.api_server.utils.RequestException;
 import com.theah64.sg.api_server.utils.ServerHeaderSecurity;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +38,7 @@ public class AddStatusesServlet extends AdvancedBaseServlet {
     }
 
     @Override
-    protected void doAdvancedPost() throws BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException, Request.RequestException {
+    protected void doAdvancedPost() throws BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException, RequestException {
         new ServerHeaderSecurity(getHttpServletRequest().getHeader(ServerHeaderSecurity.KEY_AUTHORIZATION));
         final JSONArray jaStatuses = new JSONArray(getStringParameter(SMSRequestStatus.KEY_STATUSES));
         SMSRequestStatuses.getInstance().add(jaStatuses);

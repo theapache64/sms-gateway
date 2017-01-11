@@ -14,7 +14,7 @@ public class HeaderSecurity {
     private final String authorization;
     private String userId;
 
-    public HeaderSecurity(final String authorization) throws Request.RequestException {
+    public HeaderSecurity(final String authorization) throws RequestException {
         //Collecting header from passed request
         this.authorization = authorization;
         isAuthorized();
@@ -23,17 +23,17 @@ public class HeaderSecurity {
     /**
      * Used to identify if passed API-KEY has a valid victim.
      */
-    protected void isAuthorized() throws Request.RequestException {
+    protected void isAuthorized() throws RequestException {
 
         if (this.authorization == null) {
             //No api key passed along with request
-            throw new Request.RequestException("Unauthorized access");
+            throw new RequestException("Unauthorized access");
         }
 
         final Users users = Users.getInstance();
         this.userId = users.get(Users.COLUMN_API_KEY, this.authorization, Users.COLUMN_ID, true);
         if (this.userId == null) {
-            throw new Request.RequestException("No user found with the api_key " + this.authorization);
+            throw new RequestException("No user found with the api_key " + this.authorization);
         }
 
     }

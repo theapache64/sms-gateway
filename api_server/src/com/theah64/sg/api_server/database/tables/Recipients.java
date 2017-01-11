@@ -2,6 +2,7 @@ package com.theah64.sg.api_server.database.tables;
 
 import com.theah64.sg.api_server.database.Connection;
 import com.theah64.sg.api_server.models.Recipient;
+import com.theah64.sg.api_server.utils.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +40,6 @@ public class Recipients extends BaseTable<Recipient> {
             queryBuilder.append("(?,?),");
         }
         final String query = queryBuilder.substring(0, queryBuilder.length() - 1) + ";";
-        System.out.println(query);
 
         final java.sql.Connection con = Connection.getConnection();
         try {
@@ -48,7 +48,6 @@ public class Recipients extends BaseTable<Recipient> {
             for (int i = 0; i < jaRecipients.length(); i++) {
                 ps.setString(x + 1, requestId);
                 ps.setString(x + 2, jaRecipients.getString(i));
-                System.out.println(String.format("%d %d", x + 1, x + 2));
                 x = x + 2;
             }
 

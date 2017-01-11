@@ -6,9 +6,7 @@ import com.theah64.sg.api_server.database.tables.SMSRequests;
 import com.theah64.sg.api_server.database.tables.Servers;
 import com.theah64.sg.api_server.models.SMSRequest;
 import com.theah64.sg.api_server.models.Server;
-import com.theah64.sg.api_server.utils.APIResponse;
-import com.theah64.sg.api_server.utils.FCMUtils;
-import com.theah64.sg.api_server.utils.Request;
+import com.theah64.sg.api_server.utils.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +19,8 @@ import javax.servlet.annotation.WebServlet;
 @WebServlet(urlPatterns = {AdvancedBaseServlet.VERSION_CODE + "/send_sms"})
 public class SendSMSServlet extends AdvancedBaseServlet {
 
+    private static final String X = SendSMSServlet.class.getSimpleName();
+
     @Override
     protected boolean isSecureServlet() {
         return true;
@@ -32,7 +32,7 @@ public class SendSMSServlet extends AdvancedBaseServlet {
     }
 
     @Override
-    protected void doAdvancedPost() throws Request.RequestException, BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException {
+    protected void doAdvancedPost() throws RequestException, BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException {
 
         final JSONArray jaRecipients = new JSONArray(getStringParameter(Recipients.TABLE_NAME));
         if (jaRecipients.length() > 0) {
@@ -41,20 +41,20 @@ public class SendSMSServlet extends AdvancedBaseServlet {
 
             if (smsServer != null) {
 
+                final int totalParts = (int) Math.ceil(message.length() / 140);
+
                 //Adding request
                 final String smsReqId = SMSRequests.getInstance().addv3(new SMSRequest(message, smsServer.getId(), getHeaderSecurity().getUserId(), totalParts));
 
                 //Adding recipients
                 final JSONArray jaAdvancedRecipients = Recipients.getInstance().add(smsReqId, jaRecipients);
 
-                System.out.println(jaAdvancedRecipients);
-
                 //Sending sms
                 final JSONObject joFcmResp = FCMUtils.sendSMS(jaAdvancedRecipients, message, smsServer.getFcmId());
 
                 if (joFcmResp != null) {
 
-                    System.out.println("FCM Says: " + joFcmResp);
+                    Log.d(X, "FCM Says: " + joFcmResp);
 
                     final boolean isSuccess = joFcmResp.getInt("success") == 1;
 
@@ -65,19 +65,19 @@ public class SendSMSServlet extends AdvancedBaseServlet {
                         getWriter().write(new APIResponse("SMS Sent", joData).getResponse());
                     } else {
                         final String failureReason = joFcmResp.getJSONArray("results").getJSONObject(0).getString("error");
-                        throw new Request.RequestException("SMS Server error: " + failureReason);
+                        throw new RequestException("SMS Server error: " + failureReason);
                     }
 
                 } else {
-                    throw new Request.RequestException("SMS Failed to send");
+                    throw new RequestException("SMS Failed to send");
                 }
 
             } else {
-                throw new Request.RequestException("No active server found");
+                throw new RequestException("No active server found");
             }
 
         } else {
-            throw new Request.RequestException("There must be at least one recipient");
+            throw new RequestException("There must be at least one recipient");
         }
 
     }

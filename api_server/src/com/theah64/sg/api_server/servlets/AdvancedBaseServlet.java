@@ -5,6 +5,7 @@ import com.theah64.sg.api_server.database.tables.BaseTable;
 import com.theah64.sg.api_server.utils.APIResponse;
 import com.theah64.sg.api_server.utils.HeaderSecurity;
 import com.theah64.sg.api_server.utils.Request;
+import com.theah64.sg.api_server.utils.RequestException;
 import org.json.JSONException;
 
 import javax.servlet.ServletException;
@@ -79,7 +80,7 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
 
     protected abstract String[] getRequiredParameters();
 
-    protected abstract void doAdvancedPost() throws BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException, Request.RequestException;
+    protected abstract void doAdvancedPost() throws BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException, RequestException, RequestException;
 
     public HeaderSecurity getHeaderSecurity() {
         if (!isSecureServlet()) {

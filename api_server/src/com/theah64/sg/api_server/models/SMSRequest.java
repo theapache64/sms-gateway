@@ -29,4 +29,14 @@ public class SMSRequest {
     public int getTotalParts() {
         return totalParts;
     }
+
+    @Override
+    public String toString() {
+        return "SMSRequest{" +
+                "message='" + message + '\'' +
+                ", serverId='" + serverId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", totalParts=" + totalParts +
+                '}';
+    }
 }

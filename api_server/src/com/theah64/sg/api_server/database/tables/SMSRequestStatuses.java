@@ -1,9 +1,8 @@
 package com.theah64.sg.api_server.database.tables;
 
 import com.theah64.sg.api_server.database.Connection;
-import com.theah64.sg.api_server.models.Recipient;
 import com.theah64.sg.api_server.models.SMSRequestStatus;
-import com.theah64.sg.api_server.utils.Request;
+import com.theah64.sg.api_server.utils.RequestException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,7 +75,7 @@ public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
     }
 
 
-    public JSONArray getStatuses(final String requestId, final String userId) throws JSONException, Request.RequestException {
+    public JSONArray getStatuses(final String requestId, final String userId) throws JSONException, RequestException {
 
         JSONArray jaStatuses = null;
 
@@ -123,7 +122,7 @@ public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
         }
 
         if (jaStatuses == null) {
-            throw new Request.RequestException("No status found");
+            throw new RequestException("No status found");
         }
 
         return jaStatuses;

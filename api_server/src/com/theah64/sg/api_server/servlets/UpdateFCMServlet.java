@@ -3,7 +3,7 @@ package com.theah64.sg.api_server.servlets;
 import com.theah64.sg.api_server.database.tables.BaseTable;
 import com.theah64.sg.api_server.database.tables.Servers;
 import com.theah64.sg.api_server.utils.APIResponse;
-import com.theah64.sg.api_server.utils.Request;
+import com.theah64.sg.api_server.utils.RequestException;
 import com.theah64.sg.api_server.utils.ServerHeaderSecurity;
 import org.json.JSONException;
 
@@ -35,7 +35,7 @@ public class UpdateFCMServlet extends AdvancedBaseServlet {
     }
 
     @Override
-    protected void doAdvancedPost() throws Request.RequestException, BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException {
+    protected void doAdvancedPost() throws RequestException, BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException {
         final ServerHeaderSecurity serverHeaderSecurity = new ServerHeaderSecurity(getHttpServletRequest().getHeader(ServerHeaderSecurity.KEY_AUTHORIZATION));
         final String serverId = serverHeaderSecurity.getServerId();
         final String fcmId = getStringParameter(Servers.COLUMN_FCM_ID);

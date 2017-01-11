@@ -2,6 +2,7 @@ package com.theah64.sg.api_server.database.tables;
 
 import com.theah64.sg.api_server.database.Connection;
 import com.theah64.sg.api_server.models.SMSRequest;
+import com.theah64.sg.api_server.utils.Log;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +15,8 @@ public class SMSRequests extends BaseTable<SMSRequest> {
     public static final String COLUMN_MESSAGE = "message";
     private static final SMSRequests instance = new SMSRequests();
 
+    private static final String X = SMSRequest.class.getSimpleName();
+
     private SMSRequests() {
         super("sms_requests");
     }
@@ -24,6 +27,9 @@ public class SMSRequests extends BaseTable<SMSRequest> {
 
     @Override
     public String addv3(SMSRequest request) throws InsertFailedException {
+
+        Log.d(X, "New sms request: " + request);
+
         String requestId = null;
         final String query = "INSERT INTO sms_requests (message,server_id,user_id,total_parts) VALUES (?,?,?,?);";
         final java.sql.Connection con = Connection.getConnection();

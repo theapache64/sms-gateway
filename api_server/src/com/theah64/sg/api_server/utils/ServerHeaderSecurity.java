@@ -9,22 +9,22 @@ public class ServerHeaderSecurity extends HeaderSecurity {
 
     private String serverId;
 
-    public ServerHeaderSecurity(String authorization) throws Request.RequestException {
+    public ServerHeaderSecurity(String authorization) throws RequestException {
         super(authorization);
     }
 
     @Override
-    protected void isAuthorized() throws Request.RequestException {
+    protected void isAuthorized() throws RequestException {
 
         if (getAuthorization() == null) {
             //No api key passed along with request
-            throw new Request.RequestException("Unauthorized access");
+            throw new RequestException("Unauthorized access");
         }
 
         final Servers servers = Servers.getInstance();
         this.serverId = servers.get(Servers.COLUMN_SERVER_KEY, getAuthorization(), Servers.COLUMN_ID, true);
         if (this.serverId == null) {
-            throw new Request.RequestException("No server found with the key " + getAuthorization());
+            throw new RequestException("No server found with the key " + getAuthorization());
         }
 
     }
