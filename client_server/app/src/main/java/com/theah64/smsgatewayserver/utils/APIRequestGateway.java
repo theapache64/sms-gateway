@@ -138,7 +138,12 @@ public class APIRequestGateway {
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    callback.onReadyToRequest(serverKey);
+                                    try {
+                                        callback.onReadyToRequest(serverKey);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        callback.onFailed(e.getMessage());
+                                    }
                                 }
                             });
 
@@ -185,11 +190,21 @@ public class APIRequestGateway {
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            callback.onReadyToRequest(serverKey);
+                            try {
+                                callback.onReadyToRequest(serverKey);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                callback.onFailed(e.getMessage());
+                            }
                         }
                     });
                 } else {
-                    callback.onReadyToRequest(serverKey);
+                    try {
+                        callback.onReadyToRequest(serverKey);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        callback.onFailed(e.getMessage());
+                    }
                 }
 
             } else {

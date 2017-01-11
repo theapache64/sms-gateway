@@ -44,13 +44,13 @@ public class SMSStatuses extends BaseTable<SMSStatus> {
     private static final String TABLE_NAME_SMS_STATUSES = "sms_statuses";
     private static final String COLUMN_REASON = "reason";
     private static final String X = SMSStatuses.class.getSimpleName();
-    private SMSStatuses instance;
+    private static SMSStatuses instance;
 
     private SMSStatuses(Context context) {
         super(context, TABLE_NAME_SMS_STATUSES);
     }
 
-    public SMSStatuses getInstance(Context context) {
+    public static SMSStatuses getInstance(Context context) {
         if (instance == null) {
             instance = new SMSStatuses(context.getApplicationContext());
         }
@@ -85,7 +85,7 @@ public class SMSStatuses extends BaseTable<SMSStatus> {
                     if (smsStatus.getReason() != null) {
                         joStatus.put(COLUMN_REASON, smsStatus.getReason());
                     }
-                    joStatus.put(COLUMN_OCCURRED_AT, smsStatus.getOccurredAt());
+                    joStatus.put(COLUMN_OCCURRED_AT, smsStatus.getOccurredAt() + ""); //string fix
 
                     jaStatuses.put(joStatus);
 
@@ -104,7 +104,8 @@ public class SMSStatuses extends BaseTable<SMSStatus> {
                             final String stringResp = OkHttpUtils.logAndGetStringBody(response);
                             try {
                                 final APIResponse apiResponse = new APIResponse(stringResp);
-                                Log.i(X,"")
+                                Log.i(X, stringResp);
+
                             } catch (APIResponse.APIException | JSONException e) {
                                 e.printStackTrace();
                             }

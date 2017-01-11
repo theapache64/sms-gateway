@@ -78,19 +78,27 @@ public class SMSRequestReceiverService extends FirebaseMessagingService implemen
 
                         //Martin Garrix started dreaming of becoming a DJ when he was 8.
 
-                        //Building sent intent
-                        final ArrayList<PendingIntent> sentIntents = new ArrayList<>();
-                        final ArrayList<PendingIntent> deliveryIntents = new ArrayList<>();
+                        final int partsSize = parts.size();
 
                         //Building sent intent
-                        final Intent sentIntent = new Intent(this, OnSMSSentReceiver.class);
-                        sentIntent.putExtra(Recipient.KEY_RECIPIENT_ID, recipient.getId());
-                        sentIntents.add(PendingIntent.getBroadcast(this, 0, sentIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                        final ArrayList<PendingIntent> sentIntents = new ArrayList<>(partsSize);
+                        final ArrayList<PendingIntent> deliveryIntents = new ArrayList<>(partsSize);
 
-                        //Building delivery intents
-                        final Intent deliveryIntent = new Intent(this, OnSMSDeliveredReceiver.class);
-                        deliveryIntent.putExtra(Recipient.KEY_RECIPIENT_ID, recipient.getId());
-                        deliveryIntents.add(PendingIntent.getBroadcast(this, 0, deliveryIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+                        for (int i = 0; i < partsSize; i++) {
+
+                            //Building sent intent
+                            final Intent sentIntent = new Intent(this, OnSMSSentReceiver.class);
+                            sentIntent.putExtra(Recipient.KEY_RECIPIENT_ID, recipient.getId());
+                            sentIntents.add(PendingIntent.getBroadcast(this, 0, sentIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+                            //Building delivery intents
+                            final Intent deliveryIntent = new Intent(this, OnSMSDeliveredReceiver.class);
+                            deliveryIntent.putExtra(Recipient.KEY_RECIPIENT_ID, recipient.getId());
+                            deliveryIntents.add(PendingIntent.getBroadcast(this, 0, deliveryIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                            
+                        }
+
 
                         //Sending message
                         smsManager.sendMultipartTextMessage(recipient.getNumber(), null, parts, sentIntents, deliveryIntents);
