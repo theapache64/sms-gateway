@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.theah64.smsgatewayserver.async.FCMSynchronizer;
+import com.theah64.smsgatewayserver.databases.SMSStatuses;
+import com.theah64.smsgatewayserver.models.SMSStatus;
 import com.theah64.smsgatewayserver.models.Server;
 import com.theah64.smsgatewayserver.utils.APIRequestGateway;
 import com.theah64.smsgatewayserver.utils.NetworkUtils;
 import com.theah64.smsgatewayserver.utils.PermissionUtils;
 import com.theah64.smsgatewayserver.utils.PrefUtils;
+
+import java.util.List;
 
 
 public class NetworkReceiver extends BroadcastReceiver implements PermissionUtils.Callback {
@@ -37,6 +41,10 @@ public class NetworkReceiver extends BroadcastReceiver implements PermissionUtil
                     @Override
                     public void onReadyToRequest(String apiKey) {
                         new FCMSynchronizer(context, apiKey).execute();
+
+                        //Syncing sms statuses
+                        final List<SMSStatus> statusList = SMSStatuses.getInstance(context).getAll();
+                        SMSStatus.sync(context,statusList);
                     }
 
                     @Override

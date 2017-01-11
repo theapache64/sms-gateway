@@ -4,25 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.theah64.smsgatewayserver.models.SMSStatus;
-import com.theah64.smsgatewayserver.utils.APIRequestBuilder;
-import com.theah64.smsgatewayserver.utils.APIRequestGateway;
-import com.theah64.smsgatewayserver.utils.APIResponse;
 import com.theah64.smsgatewayserver.utils.NetworkUtils;
-import com.theah64.smsgatewayserver.utils.OkHttpUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
 
 
 /**
@@ -38,9 +22,9 @@ import okhttp3.Response;
  */
 public class SMSStatuses extends BaseTable<SMSStatus> {
 
-    private static final String COLUMN_RECIPIENT_ID = "recipient_id";
-    private static final String COLUMN_STATUS = "status";
-    private static final String COLUMN_OCCURRED_AT = "occurred_at";
+    public static final String COLUMN_RECIPIENT_ID = "recipient_id";
+    public static final String COLUMN_STATUS = "status";
+    public static final String COLUMN_OCCURRED_AT = "occurred_at";
     private static final String TABLE_NAME_SMS_STATUSES = "sms_statuses";
     private static final String COLUMN_REASON = "reason";
     private static final String X = SMSStatuses.class.getSimpleName();
@@ -66,60 +50,14 @@ public class SMSStatuses extends BaseTable<SMSStatus> {
         cv.put(COLUMN_REASON, smsStatus.getReason());
         cv.put(COLUMN_OCCURRED_AT, smsStatus.getOccurredAt());
 
-        long statusId = this.getWritableDatabase().insert(TABLE_NAME_SMS_STATUSES, null, cv);
+        final long statusId = this.getWritableDatabase().insert(TABLE_NAME_SMS_STATUSES, null, cv);
         if (statusId == -1) {
             throw new IllegalArgumentException("Failed to insert new sms status");
         }
 
         if (NetworkUtils.hasNetwork(getContext())) {
-            //Syncing the status
-            new APIRequestGateway(getContext(), new APIRequestGateway.APIRequestGatewayCallback() {
-                @Override
-                public void onReadyToRequest(String serverKey) throws JSONException {
-
-                    final JSONArray jaStatuses = new JSONArray();
-                    final JSONObject joStatus = new JSONObject();
-
-                    joStatus.put(COLUMN_RECIPIENT_ID, smsStatus.getRecipientId());
-                    joStatus.put(COLUMN_STATUS, smsStatus.getStatus());
-                    if (smsStatus.getReason() != null) {
-                        joStatus.put(COLUMN_REASON, smsStatus.getReason());
-                    }
-                    joStatus.put(COLUMN_OCCURRED_AT, smsStatus.getOccurredAt() + ""); //string fix
-
-                    jaStatuses.put(joStatus);
-
-                    final Request statusSyncRequest = new APIRequestBuilder("/add_statuses", serverKey)
-                            .addParam("statuses", jaStatuses.toString())
-                            .build();
-
-                    OkHttpUtils.getInstance().getClient().newCall(statusSyncRequest).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            final String stringResp = OkHttpUtils.logAndGetStringBody(response);
-                            try {
-                                final APIResponse apiResponse = new APIResponse(stringResp);
-                                Log.i(X, stringResp);
-
-                            } catch (APIResponse.APIException | JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-
-                }
-
-                @Override
-                public void onFailed(String reason) {
-
-                }
-            }, false);
-
+            smsStatus.setId(String.valueOf(statusId));
+            SMSStatus.sync(smsStatus);
         }
 
         return statusId;
