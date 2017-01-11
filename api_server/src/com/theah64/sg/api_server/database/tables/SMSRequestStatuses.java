@@ -1,6 +1,7 @@
 package com.theah64.sg.api_server.database.tables;
 
 import com.theah64.sg.api_server.database.Connection;
+import com.theah64.sg.api_server.models.Recipient;
 import com.theah64.sg.api_server.models.SMSRequestStatus;
 import com.theah64.sg.api_server.utils.Request;
 import org.json.JSONArray;
@@ -23,6 +24,7 @@ public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
     private static final SMSRequestStatuses instance = new SMSRequestStatuses();
     private static final String COLUMN_STATUS = "status";
     private static final String COLUMN_OCCURRED_AT = "occurred_at";
+    private static final String COLUMN_REASON = "reason";
 
     private SMSRequestStatuses() {
         super("sms_request_statuses");
@@ -34,7 +36,7 @@ public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
 
     public void add(final JSONArray jaStatuses) throws InsertFailedException, JSONException {
 
-        final String query = "INSERT INTO sms_request_statuses (recipient_id, status, occurred_at) VALUES (?,?,?);";
+        final String query = "INSERT INTO sms_request_statuses (recipient_id, status, occurred_at,reason) VALUES (?,?,?,?);";
         final java.sql.Connection con = Connection.getConnection();
         try {
             final PreparedStatement ps = con.prepareStatement(query);
@@ -45,10 +47,15 @@ public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
                 final String recId = joStatus.getString(COLUMN_RECIPIENT_ID);
                 final String status = joStatus.getString(COLUMN_STATUS);
                 final String occurredAt = joStatus.getString(COLUMN_OCCURRED_AT);
+                String reason = null;
+                if (joStatus.has(COLUMN_REASON)) {
+                    reason = joStatus.getString(COLUMN_REASON);
+                }
 
                 ps.setString(1, recId);
                 ps.setString(2, status);
                 ps.setString(3, occurredAt);
+                ps.setString(4, reason);
 
                 if (ps.executeUpdate() != 1) {
                     throw new InsertFailedException("Failed to insert : " + joStatus);
@@ -73,9 +80,7 @@ public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
 
         JSONArray jaStatuses = null;
 
-        final String query = "SELECT r.recipient, sqs.status, sqs.occurred_at FROM sms_request_statuses sqs INNER JOIN recipients r ON r.id = sqs.recipient_id INNER JOIN sms_requests sr ON r.sms_request_id = sr.id WHERE sr.id = ? AND sr.user_id = ? GROUP BY r.id;";
-        final String query2 = String.format("SELECT r.recipient, sqs.status, sqs.occurred_at FROM sms_request_statuses sqs INNER JOIN recipients r ON r.id = sqs.recipient_id INNER JOIN sms_requests sr ON r.sms_request_id = sr.id WHERE sr.id = %s AND sr.user_id = %s GROUP BY r.id;", requestId, userId);
-        System.out.println("Query: " + query2);
+        final String query = "SELECT r.recipient, sqs.status,sqs.reason, sqs.occurred_at FROM sms_request_statuses sqs INNER JOIN recipients r ON r.id = sqs.recipient_id INNER JOIN sms_requests sr ON r.sms_request_id = sr.id WHERE sr.id = ? AND sr.user_id = ? GROUP BY sqs.id;";
 
         final java.sql.Connection con = Connection.getConnection();
 
@@ -91,14 +96,12 @@ public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
                 jaStatuses = new JSONArray();
 
                 do {
-                    final String recipient = rs.getString(Recipients.COLUMN_RECIPIENT);
-                    final String status = rs.getString(COLUMN_STATUS);
-                    final String occurredAt = rs.getString(COLUMN_OCCURRED_AT);
 
                     final JSONObject joStatus = new JSONObject();
-                    joStatus.put(Recipients.COLUMN_RECIPIENT, recipient);
-                    joStatus.put(COLUMN_STATUS, status);
-                    joStatus.put(COLUMN_OCCURRED_AT, occurredAt);
+                    joStatus.put(Recipients.COLUMN_RECIPIENT, rs.getString(Recipients.COLUMN_RECIPIENT));
+                    joStatus.put(COLUMN_STATUS, rs.getString(COLUMN_STATUS));
+                    joStatus.put(COLUMN_REASON, rs.getString(COLUMN_REASON));
+                    joStatus.put(COLUMN_OCCURRED_AT, rs.getLong(COLUMN_OCCURRED_AT));
 
                     jaStatuses.put(joStatus);
 

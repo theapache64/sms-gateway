@@ -1,6 +1,8 @@
 package com.theah64.smsgatewayserver.databases;
 
 import android.content.Context;
+import android.os.Handler;
+import android.support.annotation.Nullable;
 
 import com.theah64.smsgatewayserver.models.SMSStatus;
 
@@ -21,5 +23,10 @@ public class SMSStatuses extends BaseTable<SMSStatus> {
             instance = new SMSStatuses(context.getApplicationContext());
         }
         return instance;
+    }
+
+    @Override
+    public long add(SMSStatus newInstance, @Nullable Handler handler) {
+        return super.add(newInstance, handler);
     }
 }

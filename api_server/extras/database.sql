@@ -61,6 +61,7 @@ CREATE TABLE sms_request_statuses(
   id INT NOT NULL AUTO_INCREMENT,
   recipient_id INT NOT NULL,
   status ENUM('SENT_TO_SERVER','DELIVERED_TO_SERVER','FAILED_TO_SEND_TO_SERVER','SENT_TO_RECIPIENT','DELIVERED_TO_RECIPIENT','FAILED_TO_SEND_TO_RECIPIENT') NOT NULL DEFAULT 'SENT_TO_SERVER',
+  reason TEXT DEFAULT NULL,
   occurred_at BIGINT NOT NULL ,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   is_active TINYINT(4) NOT NULL DEFAULT 1,
@@ -93,12 +94,3 @@ INSERT INTO preference (_key, _value) VALUES
 ('email_username', 'mymailer64@gmail.com'),
 ('email_password', 'mypassword64'),
 ('admin_email', 'theapache64@gmail.com');
-
-SELECT
-  r.recipient,
-  sqs.status,
-  sqs.occurred_at
-FROM sms_request_statuses sqs
-INNER JOIN recipients r ON r.id = sqs.recipient_id
-INNER JOIN sms_requests sr ON r.sms_request_id = sr.id WHERE sr.id = 49 AND sr.user_id = 1
-GROUP BY sqs.id;
