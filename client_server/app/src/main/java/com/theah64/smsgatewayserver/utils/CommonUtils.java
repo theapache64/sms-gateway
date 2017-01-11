@@ -3,8 +3,12 @@ package com.theah64.smsgatewayserver.utils;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.File;
 
@@ -50,5 +54,36 @@ public class CommonUtils {
 
     public static String getSanitizedName(final String fileName) {
         return fileName.replaceAll("[^\\w]", "_").replaceAll("[_]{2,}", "_");
+    }
+
+    public static String get(int count, @Nullable String start, String symbol, String seperator, @Nullable String end) {
+
+        final StringBuilder sb = new StringBuilder();
+        if (start != null) {
+            sb.append(start);
+        }
+
+        for (int i = 0; i < count; i++) {
+            sb.append(symbol);
+
+            if ((i + 1) < count) {
+                sb.append(seperator);
+            }
+        }
+
+        if (end != null) {
+            sb.append(end);
+        }
+
+
+        return sb.toString();
+    }
+
+    public static String[] toStringArray(JSONArray jaJsonArray) throws JSONException {
+        final String[] arr = new String[jaJsonArray.length()];
+        for (int i = 0; i < jaJsonArray.length(); i++) {
+            arr[i] = jaJsonArray.getString(i);
+        }
+        return arr;
     }
 }

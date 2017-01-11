@@ -57,7 +57,7 @@ public class SMSStatuses extends BaseTable<SMSStatus> {
 
         if (NetworkUtils.hasNetwork(getContext())) {
             smsStatus.setId(String.valueOf(statusId));
-            SMSStatus.sync(smsStatus);
+            SMSStatus.sync(getContext(), smsStatus);
         }
 
         return statusId;

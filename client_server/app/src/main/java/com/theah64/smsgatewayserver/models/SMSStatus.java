@@ -7,6 +7,7 @@ import com.theah64.smsgatewayserver.databases.SMSStatuses;
 import com.theah64.smsgatewayserver.utils.APIRequestBuilder;
 import com.theah64.smsgatewayserver.utils.APIRequestGateway;
 import com.theah64.smsgatewayserver.utils.APIResponse;
+import com.theah64.smsgatewayserver.utils.CommonUtils;
 import com.theah64.smsgatewayserver.utils.OkHttpUtils;
 
 import org.json.JSONArray;
@@ -14,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
@@ -104,13 +106,20 @@ public class SMSStatus {
         if (smsStatus.getReason() != null) {
             joStatus.put(COLUMN_REASON, smsStatus.getReason());
         }
-        joStatus.put(SMSStatuses.COLUMN_OCCURRED_AT, smsStatus.getOccurredAt() + ""); //string fix
+        joStatus.put(SMSStatuses.COLUMN_OCCURRED_AT, smsStatus.getOccurredAt());
 
         return joStatus;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public static void sync(final Context context, final SMSStatus smsStatus) {
+        final List<SMSStatus> smsStatusList = new ArrayList<>(1);
+        smsStatusList.add(smsStatus);
+
+        sync(context, smsStatusList);
     }
 
     public static void sync(final Context context, final List<SMSStatus> statusList) {
@@ -134,11 +143,13 @@ public class SMSStatus {
                     public void onResponse(Call call, Response response) throws IOException {
                         final String stringResp = OkHttpUtils.logAndGetStringBody(response);
                         try {
-                            new APIResponse(stringResp);
+                            final APIResponse apiResponse = new APIResponse(stringResp);
                             Log.i(X, stringResp);
 
+                            final JSONArray jaSuccessRecipients = apiResponse.getJSONObjectData().getJSONArray("success_recipients");
+
                             //Deleting from db
-                            SMSStatuses.getInstance(context).delete(SMSStatuses.COLUMN_ID, smsStatus.getId());
+                            SMSStatuses.getInstance(context).delete(SMSStatuses.COLUMN_RECIPIENT_ID, CommonUtils.toStringArray(jaSuccessRecipients));
 
                         } catch (APIResponse.APIException | JSONException e) {
                             e.printStackTrace();

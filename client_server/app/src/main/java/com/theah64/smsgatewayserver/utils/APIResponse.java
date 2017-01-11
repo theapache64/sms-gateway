@@ -2,6 +2,7 @@ package com.theah64.smsgatewayserver.utils;
 
 import android.support.annotation.StringRes;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,6 +28,10 @@ public class APIResponse {
 
     public JSONObject getJSONObjectData() throws JSONException {
         return joMain.getJSONObject("data");
+    }
+
+    public JSONArray getJSONArrayData() throws JSONException {
+        return joMain.getJSONArray("data");
     }
 
 

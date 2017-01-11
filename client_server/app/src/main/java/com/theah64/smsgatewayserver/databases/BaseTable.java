@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.theah64.smsgatewayserver.utils.App;
+import com.theah64.smsgatewayserver.utils.CommonUtils;
 import com.theah64.smsgatewayserver.utils.FileUtils;
 
 import java.io.IOException;
@@ -135,6 +136,9 @@ public class BaseTable<T> extends SQLiteOpenHelper {
         return this.getWritableDatabase().delete(getTableName(), whereColumn + " = ?", new String[]{whereColumnValue}) == 1;
     }
 
+    public boolean delete(final String whereColumn, final String[] whereColumnInValue) {
+        return this.getWritableDatabase().delete(getTableName(), whereColumn + " IN " + CommonUtils.get(whereColumnInValue.length, "(", "?", ",", ")"), whereColumnInValue) > 0;
+    }
 
     public Context getContext() {
         return context;
