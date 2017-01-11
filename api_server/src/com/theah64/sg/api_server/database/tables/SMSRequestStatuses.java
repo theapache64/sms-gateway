@@ -33,8 +33,8 @@ public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
         return instance;
     }
 
-    public void add(final JSONArray jaStatuses) throws InsertFailedException, JSONException {
-
+    public JSONArray add(final JSONArray jaStatuses) throws InsertFailedException, JSONException {
+        JSONArray jaSuccessRecipients = new JSONArray();
         final String query = "INSERT INTO sms_request_statuses (recipient_id, status, occurred_at,reason) VALUES (?,?,?,?);";
         final java.sql.Connection con = Connection.getConnection();
         try {
@@ -44,8 +44,10 @@ public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
                 final JSONObject joStatus = jaStatuses.getJSONObject(i);
 
                 final String recId = joStatus.getString(COLUMN_RECIPIENT_ID);
+
+
                 final String status = joStatus.getString(COLUMN_STATUS);
-                final String occurredAt = joStatus.getString(COLUMN_OCCURRED_AT);
+                final long occurredAt = joStatus.getLong(COLUMN_OCCURRED_AT);
                 String reason = null;
                 if (joStatus.has(COLUMN_REASON)) {
                     reason = joStatus.getString(COLUMN_REASON);
@@ -53,11 +55,13 @@ public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
 
                 ps.setString(1, recId);
                 ps.setString(2, status);
-                ps.setString(3, occurredAt);
+                ps.setLong(3, occurredAt);
                 ps.setString(4, reason);
 
                 if (ps.executeUpdate() != 1) {
                     throw new InsertFailedException("Failed to insert : " + joStatus);
+                } else {
+                    jaSuccessRecipients.put(recId);
                 }
             }
 
@@ -72,6 +76,12 @@ public class SMSRequestStatuses extends BaseTable<SMSRequestStatus> {
                 e.printStackTrace();
             }
         }
+
+        if (jaSuccessRecipients.length() == 0) {
+            throw new IllegalArgumentException("No succeeded recipient found");
+        }
+
+        return jaSuccessRecipients;
     }
 
 

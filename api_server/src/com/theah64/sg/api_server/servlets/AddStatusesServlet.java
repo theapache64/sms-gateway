@@ -8,6 +8,7 @@ import com.theah64.sg.api_server.utils.RequestException;
 import com.theah64.sg.api_server.utils.ServerHeaderSecurity;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,7 +42,11 @@ public class AddStatusesServlet extends AdvancedBaseServlet {
     protected void doAdvancedPost() throws BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException, RequestException {
         new ServerHeaderSecurity(getHttpServletRequest().getHeader(ServerHeaderSecurity.KEY_AUTHORIZATION));
         final JSONArray jaStatuses = new JSONArray(getStringParameter(SMSRequestStatus.KEY_STATUSES));
-        SMSRequestStatuses.getInstance().add(jaStatuses);
-        getWriter().write(new APIResponse("Status(es) added", null).getResponse());
+        final JSONArray jaSucRec = SMSRequestStatuses.getInstance().add(jaStatuses);
+
+        final JSONObject joData = new JSONObject();
+        joData.put("success_recipients", jaSucRec);
+
+        getWriter().write(new APIResponse("Status(es) added", joData).getResponse());
     }
 }

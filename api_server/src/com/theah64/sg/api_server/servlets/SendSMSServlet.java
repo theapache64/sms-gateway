@@ -41,7 +41,7 @@ public class SendSMSServlet extends AdvancedBaseServlet {
 
             if (smsServer != null) {
 
-                final int totalParts = (int) Math.ceil(message.length() / 140);
+                final int totalParts = (int) (Math.ceil((float) message.length() / 140));
 
                 //Adding request
                 final String smsReqId = SMSRequests.getInstance().addv3(new SMSRequest(message, smsServer.getId(), getHeaderSecurity().getUserId(), totalParts));
