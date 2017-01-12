@@ -3,6 +3,8 @@ package com.theah64.sg.api_server.servlets;
 import com.theah64.sg.api_server.database.tables.BaseTable;
 import com.theah64.sg.api_server.database.tables.Recipients;
 import com.theah64.sg.api_server.database.tables.SMSRequestStatuses;
+import com.theah64.sg.api_server.database.tables.SMSRequests;
+import com.theah64.sg.api_server.models.SMSRequest;
 import com.theah64.sg.api_server.models.SMSRequestStatus;
 import com.theah64.sg.api_server.utils.APIResponse;
 import com.theah64.sg.api_server.utils.RequestException;
@@ -39,8 +41,13 @@ public class GetStatusServlet extends AdvancedBaseServlet {
 
     @Override
     protected void doAdvancedPost() throws BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException, RequestException {
+
         final String userId = getHeaderSecurity().getUserId();
         final String smsReqId = getStringParameter(Recipients.COLUMN_SMS_REQUEST_ID);
+
+        //Getting the message first
+        final SMSRequest smsRequest = SMSRequests.getInstance().get(SMSRequests.COLUMN_ID, smsReqId, SMSRequests.COLUMN_USER_ID, userId);
+
         final JSONArray jaStatuses = SMSRequestStatuses.getInstance().getStatuses(smsReqId, userId);
         final JSONObject joData = new JSONObject();
         joData.put(SMSRequestStatus.KEY_STATUSES, jaStatuses);

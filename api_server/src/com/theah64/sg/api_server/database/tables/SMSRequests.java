@@ -16,6 +16,7 @@ public class SMSRequests extends BaseTable<SMSRequest> {
     private static final SMSRequests instance = new SMSRequests();
 
     private static final String X = SMSRequest.class.getSimpleName();
+    public static final String COLUMN_USER_ID = "user_id";
 
     private SMSRequests() {
         super("sms_requests");
@@ -61,5 +62,13 @@ public class SMSRequests extends BaseTable<SMSRequest> {
         }
 
         return requestId;
+    }
+
+    @Override
+    public SMSRequest get(String column1, String value1, String column2, String value2) {
+        SMSRequest smsRequest = null;
+        final String query = String.format("SELECT message,total_parts,created_at FROM sms_requests WHERE %s = ? AND %s = ?", column1, column2);
+        final
+        return smsRequest;
     }
 }
