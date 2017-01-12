@@ -6,7 +6,10 @@ import com.theah64.sg.api_server.database.tables.SMSRequests;
 import com.theah64.sg.api_server.database.tables.Servers;
 import com.theah64.sg.api_server.models.SMSRequest;
 import com.theah64.sg.api_server.models.Server;
-import com.theah64.sg.api_server.utils.*;
+import com.theah64.sg.api_server.utils.APIResponse;
+import com.theah64.sg.api_server.utils.FCMUtils;
+import com.theah64.sg.api_server.utils.Log;
+import com.theah64.sg.api_server.utils.RequestException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +38,9 @@ public class SendSMSServlet extends AdvancedBaseServlet {
     protected void doAdvancedPost() throws RequestException, BaseTable.InsertFailedException, JSONException, BaseTable.UpdateFailedException {
 
         final JSONArray jaRecipients = new JSONArray(getStringParameter(Recipients.TABLE_NAME));
-        if (jaRecipients.length() > 0) {
+
+        if (jaRecipients.length() > 0 && SMSRequest.isValidRecipients(jaRecipients)) {
+
             final String message = getStringParameter(SMSRequests.COLUMN_MESSAGE);
             final Server smsServer = Servers.getInstance().getLeastUsedServer();
 

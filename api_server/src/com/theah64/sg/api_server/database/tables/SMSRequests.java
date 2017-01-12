@@ -17,6 +17,7 @@ public class SMSRequests extends BaseTable<SMSRequest> {
 
     private static final String X = SMSRequest.class.getSimpleName();
     public static final String COLUMN_USER_ID = "user_id";
+    public static final String COLUMN_TOTAL_PARTS = "total_parts";
 
     private SMSRequests() {
         super("sms_requests");
@@ -67,8 +68,33 @@ public class SMSRequests extends BaseTable<SMSRequest> {
     @Override
     public SMSRequest get(String column1, String value1, String column2, String value2) {
         SMSRequest smsRequest = null;
-        final String query = String.format("SELECT message,total_parts,created_at FROM sms_requests WHERE %s = ? AND %s = ?", column1, column2);
-        final
+        final String query = String.format("SELECT message,total_parts,created_at FROM sms_requests WHERE %s = ? AND %s = ? LIMIT 1", column1, column2);
+        final java.sql.Connection con = Connection.getConnection();
+        try {
+            final PreparedStatement ps = con.prepareStatement(query);
+
+            ps.setString(1, value1);
+            ps.setString(2, value2);
+
+            final ResultSet rs = ps.executeQuery();
+
+            if (rs.first()) {
+                final String message = rs.getString(COLUMN_MESSAGE);
+                final int totalParts = rs.getInt(COLUMN_TOTAL_PARTS);
+                smsRequest = new SMSRequest(message, null, null, totalParts);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return smsRequest;
     }
 }

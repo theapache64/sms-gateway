@@ -50,7 +50,10 @@ public class GetStatusServlet extends AdvancedBaseServlet {
 
         final JSONArray jaStatuses = SMSRequestStatuses.getInstance().getStatuses(smsReqId, userId);
         final JSONObject joData = new JSONObject();
+
+        joData.put(SMSRequests.COLUMN_TOTAL_PARTS, smsRequest.getTotalParts());
         joData.put(SMSRequestStatus.KEY_STATUSES, jaStatuses);
+
         getWriter().write(new APIResponse("status available", joData).getResponse());
     }
 }

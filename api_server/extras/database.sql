@@ -52,7 +52,7 @@ CREATE TABLE sms_requests(
 CREATE TABLE recipients(
   id INT NOT NULL AUTO_INCREMENT,
   sms_request_id INT NOT NULL,
-  recipient VARCHAR (15) NOT NULL,
+  recipient VARCHAR (10) NOT NULL,
   is_active TINYINT(4) NOT NULL DEFAULT 1,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(id),

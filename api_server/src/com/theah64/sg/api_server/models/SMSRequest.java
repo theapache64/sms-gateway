@@ -1,5 +1,8 @@
 package com.theah64.sg.api_server.models;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 /**
  * Created by theapache64 on 29/11/16,9:58 AM.
  */
@@ -38,5 +41,12 @@ public class SMSRequest {
                 ", userId='" + userId + '\'' +
                 ", totalParts=" + totalParts +
                 '}';
+    }
+
+    public static boolean isValidRecipients(JSONArray jaRecipients) throws JSONException {
+        for (int i = 0; i < jaRecipients.length(); i++) {
+            final String recipient = jaRecipients.getString(i);
+        }
+        return true;
     }
 }
