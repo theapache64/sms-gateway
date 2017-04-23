@@ -40,12 +40,11 @@ public class SMSStatus {
     public static final String STATUS_DELIVERED_TO_RECIPIENT = "DELIVERED_TO_RECIPIENT";
     public static final String STATUS_FAILED_TO_DELIVER_TO_RECIPIENT = "FAILED_TO_DELIVER_TO_RECIPIENT";
     private static final String X = SMSStatus.class.getSimpleName();
-
-    private String id;
     private final String recipientId;
+    private final long occurredAt;
+    private String id;
     private String status;
     private String reason;
-    private final long occurredAt;
 
     public SMSStatus(String id, String recipientId, String status, String reason, long occurredAt) {
         this.id = id;
@@ -55,40 +54,11 @@ public class SMSStatus {
         this.occurredAt = occurredAt;
     }
 
-    public String getReason() {
-        return reason;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getRecipientId() {
-        return recipientId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public long getOccurredAt() {
-        return occurredAt;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
     public static JSONArray toJSONArray(SMSStatus smsStatus) throws JSONException {
         final JSONArray jaStatuses = new JSONArray();
         jaStatuses.put(toJSONObject(smsStatus));
         return jaStatuses;
     }
-
 
     public static JSONArray toJSONArray(List<SMSStatus> statusList) throws JSONException {
         final JSONArray jaStatuses = new JSONArray();
@@ -109,10 +79,6 @@ public class SMSStatus {
         joStatus.put(SMSStatuses.COLUMN_OCCURRED_AT, smsStatus.getOccurredAt());
 
         return joStatus;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public static void sync(final Context context, final SMSStatus smsStatus) {
@@ -164,5 +130,37 @@ public class SMSStatus {
 
             }
         }, false);
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getRecipientId() {
+        return recipientId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public long getOccurredAt() {
+        return occurredAt;
     }
 }
