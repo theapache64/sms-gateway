@@ -6,6 +6,11 @@
         <element id="directory" name="classes">
           <element id="module-output" name="sg_api_server" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="application" name="json" />
+          <element id="library" level="application" name="mail" />
+          <element id="library" level="application" name="mysql-connector-java-8.0.11" />
+        </element>
       </element>
       <element id="javaee-facet-resources" facet="sg_api_server/web/Web" />
     </root>

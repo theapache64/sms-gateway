@@ -22,7 +22,7 @@ public class Connection {
             if (ds == null) {
                 final Context initContext = new InitialContext();
                 Context envContext = (Context) initContext.lookup("java:/comp/env");
-                ds = (DataSource) envContext.lookup(debugMode ? "jdbc/sgLocal" : "jdbc/sgRemote");
+                ds = (DataSource) envContext.lookup("jdbc/sg");
             }
 
             return ds.getConnection();

@@ -96,7 +96,7 @@ public class SMSRequestReceiverService extends FirebaseMessagingService implemen
                             final Intent deliveryIntent = new Intent(this, OnSMSDeliveredReceiver.class);
                             deliveryIntent.putExtra(Recipient.KEY_RECIPIENT_ID, recipient.getId());
                             deliveryIntents.add(PendingIntent.getBroadcast(this, 0, deliveryIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-                            
+
                         }
 
 
