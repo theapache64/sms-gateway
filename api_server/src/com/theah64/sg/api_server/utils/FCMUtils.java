@@ -30,6 +30,7 @@ public class FCMUtils {
         try {
 
             joFcm.put(FCMUtils.KEY_TO, fcmId);
+            joFcm.put("priority", "high");
 
             final JSONObject joData = new JSONObject();
             joData.put(FCMUtils.KEY_TYPE, TYPE_SMS_REQUEST);
